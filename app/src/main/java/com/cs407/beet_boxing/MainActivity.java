@@ -10,6 +10,7 @@ import android.hardware.SensorManager;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorEvent;
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.animation.ObjectAnimator;
 import android.widget.ImageView;
@@ -29,10 +30,15 @@ public class MainActivity extends AppCompatActivity {
     private ImageView box;
     private int oldScore;
     private boolean isCollision;
+    private int screenWidth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screenWidth = displayMetrics.widthPixels;
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -53,9 +59,12 @@ public class MainActivity extends AppCompatActivity {
 //        animation.setRepeatCount(ObjectAnimator.INFINITE);
 //        animation.start();
 
-        setupFallingObject(R.id.falling_object1, 3000, 5000);  // 3 seconds duration, 0 delay
-        setupFallingObject(R.id.falling_object2, 3500, 10000);  // 3.5 seconds duration, 0.5 second delay
-        setupFallingObject(R.id.falling_object3, 4000, 15000);  // 4 seconds duration, 1 second delay
+//        setupFallingObject(R.id.falling_object1, 5000);  // 3 seconds duration, 0 delay
+//        setupFallingObject(R.id.falling_object2, 10000);  // 3.5 seconds duration, 0.5 second delay
+//        setupFallingObject(R.id.falling_object3, 15000);  // 4 seconds duration, 1 second delay
+        createFallingAnimation(findViewById(R.id.falling_object1));  // 3 seconds duration, 0 delay
+        createFallingAnimation(findViewById(R.id.falling_object2));  // 3.5 seconds duration, 0.5 second delay
+        createFallingAnimation(findViewById(R.id.falling_object3));  // 4 seconds duration, 1 second delay
 
     }
 
@@ -68,39 +77,56 @@ public class MainActivity extends AppCompatActivity {
 //        return animation;
 //    }
 
-    private ObjectAnimator createFallingAnimation(View view, long duration) {
-        ObjectAnimator animation = ObjectAnimator.ofFloat(view, "translationY", 0f, 2100f);
-        animation.setDuration(duration);
+    private void createFallingAnimation(View fallingObject) {
+        fallingObjects.add(fallingObject);
+
+        ObjectAnimator animation = ObjectAnimator.ofFloat(fallingObject, "translationY", 0f, 2100f);
+
+        // Change the X position, speed, or any other property for variety
+        float initialX = (float) (Math.random() * 1000);
+        fallingObject.setX(initialX);
+
+        long initialDuration = (long) (2000 + Math.random() * 2000);
+        animation.setDuration(initialDuration);
+
+        // Use a Handler to start the animation after a random initial delay
+        long initialDelay = (long) (3000 + Math.random() * 1000);
+        new Handler().postDelayed(animation::start, initialDelay);
+
+        // Initially set the view to be invisible
+        fallingObject.setVisibility(View.INVISIBLE);
         animation.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                // Make the view visible when animation starts
+                fallingObject.setVisibility(View.VISIBLE);
+            }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 // Reset the object's position once it goes out of screen
-                view.setTranslationY(0f);
-                // Also make sure the object is made invisible until the next time it starts falling
-                view.setVisibility(View.GONE);
+                fallingObject.setTranslationY(0f);
+
+                fallingObject.setVisibility(View.INVISIBLE);
+                // Change the X position, speed, or any other property for variety
+                float randomX = (float) (Math.random() * 1000);
+                fallingObject.setX(randomX);
+                // Restart the animation
+                long randomDuration = (long) (2000 + Math.random() * 2000);
+                animation.setDuration(randomDuration);
+
+                // Get a random delay before the next fall starts
+                long randomDelay = (long) (Math.random() * 1000);
+                // Use a Handler to start the animation after the random delay
+                new Handler().postDelayed(animation::start, randomDelay);
+
+//                animation.start();
             }
         });
-        return animation;
+
+
     }
 
-
-    private void setupFallingObject(int viewId, long duration, long startDelay) {
-        View fallingObject = findViewById(viewId);
-        fallingObjects.add(fallingObject);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ObjectAnimator animation = createFallingAnimation(fallingObject, duration);
-                animation.start();
-            }
-        }, startDelay);
-
-
-//        ObjectAnimator animation = createFallingAnimation(fallingObject, duration);
-//        animation.setStartDelay(startDelay);  // Setting different start delays
-//        animation.start();
-    }
 
     private final SensorEventListener sensorListener = new SensorEventListener() {
         @Override
@@ -115,6 +141,14 @@ public class MainActivity extends AppCompatActivity {
             // Move the box left or right based on this value
 //            ImageView box = findViewById(R.id.box);
             float newX = box.getX() - x * 2; // Multiplied by 5 for sensitivity, adjust as needed
+
+            // Ensure box does not move off the screen
+            if (newX < 0) {
+                newX = 0;
+            } else if (newX > screenWidth - box.getWidth()) {
+                newX = screenWidth - box.getWidth();
+            }
+
             box.setX(newX);
 
 
@@ -141,7 +175,8 @@ public class MainActivity extends AppCompatActivity {
                         isCollision = true;
 
                         // Make the fallingObject invisible
-                        collisionObject.setVisibility(View.GONE);
+                        collisionObject.setVisibility(View.INVISIBLE);
+//                        createFallingAnimation(collisionObject);
                     }
                 }
                 else
