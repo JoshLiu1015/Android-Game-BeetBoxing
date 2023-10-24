@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
+
+    <TextView
+        android:id="@+id/options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:text="Options"
+        android:textSize="50dp"/>
+
+    <TextView
+        android:id="@+id/gameplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:layout_centerHorizontal="true"
+        android:text="Gameplay"
+        android:textSize="35dp"/>
+
+    <TextView
+        android:id="@+id/tilt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="230dp"
+        android:text="Tilt"
+        android:layout_marginLeft="120dp"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/drag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="230dp"
+        android:text="Drag"
+        android:layout_marginLeft="250dp"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/volume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Volume"
+        android:textSize="30dp" />
+
+
+    <SeekBar
+        android:id="@+id/seekBarVolume"
+        android:layout_width="233dp"
+        android:layout_height="21dp"
+        android:layout_above="@+id/replayButton"
+        android:layout_below="@+id/volume"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="89dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="89dp"
+        android:layout_marginBottom="98dp" />
+
+    <Switch
+        android:id="@+id/switch3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="230dp"
+        android:scaleX="2"
+        android:scaleY="2" />
+
+
+
+
+    <Button
+        android:id="@+id/replayButton"
+        android:layout_width="197dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="126dp"
+        android:layout_centerHorizontal="true"
+        android:onClick="startGame"
+        android:text="Replay Tutorial" />
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="197dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:onClick="startGame"
+        android:text="Back" />
+
+
+</RelativeLayout>
