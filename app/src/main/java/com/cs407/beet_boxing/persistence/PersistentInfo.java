@@ -3,11 +3,8 @@ package com.cs407.beet_boxing.persistence;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.cs407.beet_boxing.util.EnumControlScheme;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import java.util.Map;
 
 /**
  * This is the main class that is intended to be interacted with when dealing with any data
@@ -38,14 +35,14 @@ public class PersistentInfo {
             config = GSON.fromJson(preferences.getString("config", ""), ConfigData.class);
         } catch (Exception e) {
             // Defaults
-            config = new ConfigData(1f, EnumControlScheme.TILT);
+            config = new ConfigData();
             return 1;
         }
 
         try {
             gameData = GSON.fromJson(preferences.getString("gameData", ""), GameData.class);
         } catch (Exception e) {
-            gameData = new GameData(Map.of(), 0);
+            gameData = new GameData();
             return 2;
         }
 
@@ -57,6 +54,7 @@ public class PersistentInfo {
         SharedPreferences preferences = preferences(context);
         preferences.edit().putString("gameData", GSON.toJson(gameData)).apply();
     }
+
     public static void saveConfig(Context context) {
         SharedPreferences preferences = preferences(context);
         preferences.edit().putString("config", GSON.toJson(config)).apply();
