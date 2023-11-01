@@ -74,16 +74,13 @@
         android:scaleY="2" />
 
 
-
-
     <Button
         android:id="@+id/replayButton"
         android:layout_width="197dp"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="126dp"
         android:layout_centerHorizontal="true"
-        android:onClick="startGame"
+        android:layout_marginBottom="126dp"
         android:text="Replay Tutorial" />
 
     <Button
@@ -93,7 +90,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
-        android:onClick="startGame"
         android:text="Back" />
 
 

@@ -17,8 +17,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
         android:background="@drawable/setting2"
-        android:contentDescription="Setting"
-        android:onClick="settingClick" />
+        android:contentDescription="Setting" />
 
     <Button
         android:id="@+id/startButton"
@@ -27,7 +26,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
-        android:onClick="startGame"
         android:text="start" />
 
     <ImageView
