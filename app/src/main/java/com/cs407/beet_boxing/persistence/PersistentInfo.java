@@ -30,23 +30,30 @@ public class PersistentInfo {
      * @return status code
      */
     public static int init(Context context) {
+        int result = 0;
         SharedPreferences preferences = preferences(context);
         try {
             config = GSON.fromJson(preferences.getString("config", ""), ConfigData.class);
+            if (config == null) {
+                config = new ConfigData();
+            }
         } catch (Exception e) {
             // Defaults
             config = new ConfigData();
-            return 1;
+            result = 1;
         }
 
         try {
             gameData = GSON.fromJson(preferences.getString("gameData", ""), GameData.class);
+            if (gameData == null) {
+                gameData = new GameData();
+            }
         } catch (Exception e) {
             gameData = new GameData();
-            return 2;
+            result = 2;
         }
 
-        return 0;
+        return result;
     }
 
     // startRegion save
