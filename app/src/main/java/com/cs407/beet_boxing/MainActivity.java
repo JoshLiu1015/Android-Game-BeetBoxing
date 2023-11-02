@@ -1,25 +1,63 @@
 package com.cs407.beet_boxing;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.cs407.beet_boxing.persistence.PersistentInfo;
+import com.cs407.beet_boxing.util.EnumProduceType;
 
 public class MainActivity extends AppCompatActivity {
+    private Button startButton;
+    private ImageButton setting;
+
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setting = findViewById(R.id.setting);
+        startButton = findViewById(R.id.startButton);
 
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(view -> goToActivity());
+        setting.setOnClickListener(this::openSetting);
+        startButton.setOnClickListener(this::startGame);
+
+        context = getApplicationContext();
+        int loadResult = PersistentInfo.init(context);
+        switch (loadResult) {
+            case 1 -> Log.i("ERROR", "Error loading config.");
+            case 2 -> Log.i("ERROR", "Error loading game data.");
+        }
+
+        // Example usage of setting values:
+        // TODO: remove when implementing garden
+        PersistentInfo.gameData.inventory.put(EnumProduceType.APPLE, 3);
+        PersistentInfo.config.volumeMultiplier = 1f;
     }
 
-    private void goToActivity() {
-        Intent intent=new Intent(this, ActivityTiltGame.class);
-        startActivity(intent);
+    public void startGame(View view) {
+        Log.i("INFO", "Button Pressed");
+        Toast.makeText(this, "start game", Toast.LENGTH_SHORT).show();
+    }
 
+    public void openSetting(View view) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        PersistentInfo.saveGameData(context);
+        PersistentInfo.saveConfig(context);
     }
 }
