@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startGame(View view) {
-        Log.i("INFO", "Button Pressed");
-        Toast.makeText(this, "start game", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, ActivityTiltGame.class);
+        startActivity(intent);
     }
 
     public void openSetting(View view) {
