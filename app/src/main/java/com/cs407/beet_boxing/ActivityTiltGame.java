@@ -4,6 +4,7 @@ package com.cs407.beet_boxing;
 
         import android.animation.Animator;
         import android.animation.AnimatorListenerAdapter;
+        import android.annotation.SuppressLint;
         import android.content.Intent;
         import android.os.Bundle;
         import android.hardware.Sensor;
@@ -14,6 +15,7 @@ package com.cs407.beet_boxing;
         import android.util.DisplayMetrics;
         import android.view.View;
         import android.animation.ObjectAnimator;
+        import android.widget.Button;
         import android.widget.ImageView;
         import android.widget.TextView;
         import android.os.Handler;
@@ -31,6 +33,8 @@ public class ActivityTiltGame extends AppCompatActivity {
     private int oldScore;
     private boolean isCollision;
     private int screenWidth;
+    private Button gardenButton;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent=getIntent();
@@ -59,8 +63,15 @@ public class ActivityTiltGame extends AppCompatActivity {
         createFallingAnimation(findViewById(R.id.falling_object2));  // 3.5 seconds duration, 0.5 second delay
         createFallingAnimation(findViewById(R.id.falling_object3));  // 4 seconds duration, 1 second delay
 
+        gardenButton = findViewById(R.id.button1);
+        gardenButton.setOnClickListener(this::startGarden);
+
     }
 
+    public void startGarden(View view) {
+        Intent intent = new Intent(this, ActivityGarden.class);
+        startActivity(intent);
+    }
 
 
     private void createFallingAnimation(View fallingObject) {
