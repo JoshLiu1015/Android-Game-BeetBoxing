@@ -27,10 +27,15 @@ public class ActivityTiltGame extends AppCompatActivity {
     private Sensor accelerometer;
     private List<View> fallingObjects;
     private TextView score;
+
+    private TextView lives;
     private ImageView box;
     private int oldScore;
     private boolean isCollision;
     private int screenWidth;
+    private int screenHeight;
+
+    private int rockId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent=getIntent();
@@ -41,6 +46,7 @@ public class ActivityTiltGame extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screenWidth = displayMetrics.widthPixels;
+        screenHeight = displayMetrics.heightPixels;
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -52,12 +58,17 @@ public class ActivityTiltGame extends AppCompatActivity {
 
         box = findViewById(R.id.box);
         score = findViewById(R.id.score);
+        lives = findViewById(R.id.lives);
+        rockId = (R.id.fallingRock);
 
         fallingObjects = new ArrayList<>();
 
-        createFallingAnimation(findViewById(R.id.falling_object1));  // 3 seconds duration, 0 delay
-        createFallingAnimation(findViewById(R.id.falling_object2));  // 3.5 seconds duration, 0.5 second delay
-        createFallingAnimation(findViewById(R.id.falling_object3));  // 4 seconds duration, 1 second delay
+        createFallingAnimation(findViewById(R.id.fallingBeet));  // 3 seconds duration, 0 delay
+        createFallingAnimation(findViewById(R.id.fallingCarrot));  // 3.5 seconds duration, 0.5 second delay
+        createFallingAnimation(findViewById(R.id.fallingRock));  // 4 seconds duration, 1 second delay
+        createFallingAnimation(findViewById(R.id.fallingApple));  // the following were added by Sage, sorry if I messed stuff up
+        createFallingAnimation(findViewById(R.id.fallingMelon));
+        createFallingAnimation(findViewById(R.id.fallingOrange));
 
     }
 
@@ -66,7 +77,7 @@ public class ActivityTiltGame extends AppCompatActivity {
     private void createFallingAnimation(View fallingObject) {
         fallingObjects.add(fallingObject);
 
-        ObjectAnimator animation = ObjectAnimator.ofFloat(fallingObject, "translationY", 0f, 2100f);
+        ObjectAnimator animation = ObjectAnimator.ofFloat(fallingObject, "translationY", 0f, (float)screenHeight);
 
         // Change the X position, speed, or any other property for variety
         float initialX = (float) (Math.random() * screenWidth);
@@ -126,7 +137,7 @@ public class ActivityTiltGame extends AppCompatActivity {
 
             // Move the box left or right based on this value
 //            ImageView box = findViewById(R.id.box);
-            float newX = box.getX() - x * 2; // Multiplied by 5 for sensitivity, adjust as needed
+            float newX = box.getX() - x * 3; // Multiplied by 3 for sensitivity, adjust as needed
 
             // Ensure box does not move off the screen
             if (newX < 0) {
@@ -143,7 +154,7 @@ public class ActivityTiltGame extends AppCompatActivity {
 
             for (View collisionObject : fallingObjects) {
                 if (collisionObject.getVisibility() == View.VISIBLE &&
-                        collisionObject.getY() + collisionObject.getHeight() >= box.getTop() &&
+                        collisionObject.getY() + collisionObject.getHeight() >= (box.getTop() + 20f ) &&
                         collisionObject.getY() <= box.getBottom() && // Ensure object is within screen bounds
                         box.getX() + box.getWidth() > collisionObject.getX() &&
                         box.getX() < collisionObject.getX() + collisionObject.getWidth()) {
@@ -153,9 +164,17 @@ public class ActivityTiltGame extends AppCompatActivity {
                     if (!isCollision) {
                         //                    Toast.makeText(MainActivity.this, "collected", Toast.LENGTH_LONG).show();
 
-                        oldScore = Integer.parseInt(score.getText().toString());
-                        oldScore++;
-                        score.setText(String.valueOf(oldScore));
+                        if(collisionObject.getId() == rockId){
+                            int oldLives = Integer.parseInt(lives.getText().toString());
+                            oldLives--;
+                            lives.setText(String.valueOf(oldLives));
+                        }
+                        else{
+                            oldScore = Integer.parseInt(score.getText().toString());
+                            oldScore++;
+                            score.setText(String.valueOf(oldScore));
+                        }
+
 
                         // Set the flag to indicate a collision
                         isCollision = true;

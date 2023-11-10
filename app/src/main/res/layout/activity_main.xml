@@ -37,7 +37,8 @@
         android:layout_width="500dp"
         android:layout_height="500dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/titlepic" />
+        android:layout_marginTop="20dp"
+        android:src="@drawable/titlescreen" />
 
     <TextView
         android:id="@+id/title"
