@@ -39,7 +39,7 @@
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:src="@drawable/beet"
+            android:src="@drawable/apple"
             android:contentDescription="@string/produce_button_description"
             android:scaleType="fitCenter"/>
 
@@ -61,7 +61,7 @@
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:src="@drawable/beet"
+            android:src="@drawable/carrot"
             android:contentDescription="@string/produce_button_description"
             android:scaleType="fitCenter"/>
 
@@ -72,7 +72,7 @@
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:src="@drawable/beet"
+            android:src="@drawable/orange"
             android:contentDescription="@string/produce_button_description"
             android:scaleType="fitCenter"/>
 
@@ -83,7 +83,7 @@
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:src="@drawable/beet"
+            android:src="@drawable/melon"
             android:contentDescription="@string/produce_button_description"
             android:scaleType="fitCenter"/>
 

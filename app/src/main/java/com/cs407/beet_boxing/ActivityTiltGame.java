@@ -59,9 +59,12 @@ public class ActivityTiltGame extends AppCompatActivity {
 
         fallingObjects = new ArrayList<>();
 
-        createFallingAnimation(findViewById(R.id.falling_object1));  // 3 seconds duration, 0 delay
-        createFallingAnimation(findViewById(R.id.falling_object2));  // 3.5 seconds duration, 0.5 second delay
-        createFallingAnimation(findViewById(R.id.falling_object3));  // 4 seconds duration, 1 second delay
+        createFallingAnimation(findViewById(R.id.fallingCarrot));  // 3 seconds duration, 0 delay
+        createFallingAnimation(findViewById(R.id.fallingBeet));  // 3.5 seconds duration, 0.5 second delay
+        createFallingAnimation(findViewById(R.id.fallingRock));  // 4 seconds duration, 1 second delay
+        createFallingAnimation(findViewById(R.id.fallingApple));
+        createFallingAnimation(findViewById(R.id.fallingMelon));
+        createFallingAnimation(findViewById(R.id.fallingOrange));
 
         gardenButton = findViewById(R.id.button1);
         gardenButton.setOnClickListener(this::startGarden);
