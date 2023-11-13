@@ -15,12 +15,12 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        app:srcCompat="@android:drawable/button_onoff_indicator_on" />
+        android:src="@drawable/box" />
 
     <TextView
         android:id="@+id/score"
         android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginRight="0dp"
         android:textSize="50dp"
@@ -28,24 +28,83 @@
         android:text="0" />
 
 
+    <TextView
+        android:id="@+id/scoreText"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/score"
+        android:layout_marginRight="0dp"
+        android:text="score"
+        android:textAlignment="center"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/lives"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp"
+        android:text="3"
+        android:textAlignment="center"
+        android:textSize="50dp" />
+
+    <TextView
+        android:id="@+id/livesText"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/lives"
+        android:layout_marginLeft="0dp"
+        android:text="lives"
+        android:textAlignment="center"
+        android:textSize="20dp" />
+
     <ImageView
-        android:id="@+id/falling_object1"
-        app:srcCompat="@android:drawable/btn_star_big_on"
+        android:id="@+id/fallingCarrot"
+        android:src="@drawable/carrotsmall"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true" />
 
     <ImageView
-        android:id="@+id/falling_object2"
-        app:srcCompat="@android:drawable/ic_delete"
+        android:id="@+id/fallingBeet"
+        android:src="@drawable/beetsmall"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true" />
 
     <ImageView
-        android:id="@+id/falling_object3"
-        app:srcCompat="@android:drawable/ic_input_add"
+        android:id="@+id/fallingRock"
+        android:src="@drawable/rock"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/fallingApple"
+        android:src="@drawable/applesmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/fallingMelon"
+        android:src="@drawable/melonsmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/fallingOrange"
+        android:src="@drawable/orangesmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button" />
 </RelativeLayout>
