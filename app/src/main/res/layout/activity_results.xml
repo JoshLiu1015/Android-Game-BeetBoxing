@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ResultsActivity">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      tools:layout_editor_absoluteX="16dp"
+      tools:layout_editor_absoluteY="55dp">
+
+    <TextView
+        android:id="@+id/beetBoxingTitle"
+        android:layout_width="match_parent"
+        android:layout_height="181dp"
+        android:gravity="center"
+        android:text="Beet Boxing"
+        android:textSize="48sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/resultsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="center"
+        android:text="Results:"
+        android:textSize="34sp" />
+
+    <TextView
+        android:id="@+id/timeSpent"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:gravity="center"
+        android:text="Time Spent: 0s"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:gravity="center"
+        android:text="Produce Caught:"
+        android:textSize="20sp" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="161dp">
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            app:cardBackgroundColor="#C2D6C3"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp">
+
+          <ImageView
+              android:id="@+id/appleResultImage"
+              android:layout_width="163dp"
+              android:layout_height="wrap_content"
+              android:src="@drawable/apple" />
+
+          <TextView
+              android:id="@+id/appleResultAmount"
+              android:layout_width="140dp"
+              android:layout_height="wrap_content"
+              android:text="0"
+              android:textSize="60sp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            app:cardBackgroundColor="#C2D6C3"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp">
+
+          <ImageView
+              android:id="@+id/carrotResultImage"
+              android:layout_width="163dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:src="@drawable/carrot" />
+
+          <TextView
+              android:id="@+id/carrotResultAmount"
+              android:layout_width="140dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="0"
+              android:textSize="60sp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            app:cardBackgroundColor="#C2D6C3"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp">
+
+          <ImageView
+              android:id="@+id/beetResultImage"
+              android:layout_width="163dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:src="@drawable/beet" />
+
+          <TextView
+              android:id="@+id/beetResultAmount"
+              android:layout_width="140dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="0"
+              android:textSize="60sp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            app:cardBackgroundColor="#C2D6C3"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp">
+
+          <ImageView
+              android:id="@+id/melonResultImage"
+              android:layout_width="163dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:src="@drawable/melon" />
+
+          <TextView
+              android:id="@+id/melonResultAmount"
+              android:layout_width="140dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="0"
+              android:textSize="60sp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            app:cardBackgroundColor="#C2D6C3"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp">
+
+          <ImageView
+              android:id="@+id/orangeResultImage"
+              android:layout_width="163dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:src="@drawable/orange" />
+
+          <TextView
+              android:id="@+id/orangeResultAmount"
+              android:layout_width="140dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="0"
+              android:textSize="60sp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            app:cardBackgroundColor="#C2D6C3"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp">
+
+          <ImageView
+              android:id="@+id/bananaResultImage"
+              android:layout_width="163dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:src="@drawable/beet" />
+
+          <TextView
+              android:id="@+id/bananaResultAmount"
+              android:layout_width="140dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="0"
+              android:textSize="60sp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            app:cardBackgroundColor="#C2D6C3"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp">
+
+          <ImageView
+              android:id="@+id/potatoResultImage"
+              android:layout_width="163dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:src="@drawable/beet" />
+
+          <TextView
+              android:id="@+id/potatoResultAmount"
+              android:layout_width="140dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="0"
+              android:textSize="60sp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            app:cardBackgroundColor="#C2D6C3"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp">
+
+          <ImageView
+              android:id="@+id/onionResultImage"
+              android:layout_width="163dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:src="@drawable/beet" />
+
+          <TextView
+              android:id="@+id/onionResultAmount"
+              android:layout_width="140dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="0"
+              android:textSize="60sp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            app:cardBackgroundColor="#C2D6C3"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp">
+
+          <ImageView
+              android:id="@+id/gingerResultImage"
+              android:layout_width="163dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:src="@drawable/beet" />
+
+          <TextView
+              android:id="@+id/gingerResultAmount"
+              android:layout_width="140dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="0"
+              android:textSize="60sp" />
+        </androidx.cardview.widget.CardView>
+
+      </LinearLayout>
+    </HorizontalScrollView>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4CAF50"
+        android:text="Button"
+        android:textColorHighlight="#4CAF50"
+        android:textColorLink="#B4E69E" />
+  </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
