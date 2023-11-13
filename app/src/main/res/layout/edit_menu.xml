@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:visibility="gone"
+    android:elevation="10dp"
+    android:background="@color/cardview_light_background"
+    android:id="@+id/edit_menu_layout">
+
+    <GridLayout
+        android:id="@+id/edit_menu_grid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:rowCount="3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <ImageButton
+            android:id="@+id/produce_icon_1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="10dp"
+            android:src="@drawable/beet"
+            android:contentDescription="@string/produce_button_description"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/produce_icon_2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="10dp"
+            android:src="@drawable/apple"
+            android:contentDescription="@string/produce_button_description"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/produce_icon_3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="10dp"
+            android:src="@drawable/beet"
+            android:contentDescription="@string/produce_button_description"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/produce_icon_4"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="10dp"
+            android:src="@drawable/carrot"
+            android:contentDescription="@string/produce_button_description"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/produce_icon_5"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="10dp"
+            android:src="@drawable/orange"
+            android:contentDescription="@string/produce_button_description"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/produce_icon_6"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="10dp"
+            android:src="@drawable/melon"
+            android:contentDescription="@string/produce_button_description"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/produce_icon_7"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="10dp"
+            android:src="@drawable/beet"
+            android:contentDescription="@string/produce_button_description"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/produce_icon_8"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="10dp"
+            android:src="@drawable/beet"
+            android:contentDescription="@string/produce_button_description"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/produce_icon_9"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="10dp"
+            android:src="@drawable/beet"
+            android:contentDescription="@string/produce_button_description"
+            android:scaleType="fitCenter"/>
+
+
+
+    </GridLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
