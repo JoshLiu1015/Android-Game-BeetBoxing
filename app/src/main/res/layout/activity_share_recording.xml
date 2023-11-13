@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".share_recording">
+
+    <Button
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:onClick="togglePlayStop"
+        android:text="play" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="130dp"
+        android:backgroundTint="@color/black" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="197dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="170dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="15dp"
+        android:onClick="saveRecord"
+        android:text="Save" />
+
+    <Button
+        android:id="@+id/download"
+        android:layout_width="197dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="270dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="15dp"
+        android:onClick="downloadRecord"
+        android:text="Download" />
+
+    <Button
+        android:id="@+id/record"
+        android:layout_width="197dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="370dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="15dp"
+        android:onClick="reRecord"
+        android:text="Re-record" />
+
+    <Button
+        android:id="@+id/garden"
+        android:layout_width="197dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="470dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="15dp"
+        android:text="Garden" />
+</RelativeLayout>

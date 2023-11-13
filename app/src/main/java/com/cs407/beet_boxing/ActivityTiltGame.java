@@ -4,6 +4,7 @@ package com.cs407.beet_boxing;
 
         import android.animation.Animator;
         import android.animation.AnimatorListenerAdapter;
+        import android.annotation.SuppressLint;
         import android.content.Intent;
         import android.os.Bundle;
         import android.hardware.Sensor;
@@ -14,6 +15,7 @@ package com.cs407.beet_boxing;
         import android.util.DisplayMetrics;
         import android.view.View;
         import android.animation.ObjectAnimator;
+        import android.widget.Button;
         import android.widget.ImageView;
         import android.widget.TextView;
         import android.os.Handler;
@@ -27,15 +29,16 @@ public class ActivityTiltGame extends AppCompatActivity {
     private Sensor accelerometer;
     private List<View> fallingObjects;
     private TextView score;
-
-    private TextView lives;
     private ImageView box;
     private int oldScore;
     private boolean isCollision;
     private int screenWidth;
-    private int screenHeight;
+//    private Button gardenButton;
+    private int lives = 3;
+    private TextView livesTextView;
+    private long startTime;
 
-    private int rockId;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent=getIntent();
@@ -46,7 +49,6 @@ public class ActivityTiltGame extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screenWidth = displayMetrics.widthPixels;
-        screenHeight = displayMetrics.heightPixels;
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -58,33 +60,67 @@ public class ActivityTiltGame extends AppCompatActivity {
 
         box = findViewById(R.id.box);
         score = findViewById(R.id.score);
-        lives = findViewById(R.id.lives);
-        rockId = (R.id.fallingRock);
 
         fallingObjects = new ArrayList<>();
 
-        createFallingAnimation(findViewById(R.id.fallingBeet));  // 3 seconds duration, 0 delay
-        createFallingAnimation(findViewById(R.id.fallingCarrot));  // 3.5 seconds duration, 0.5 second delay
-        createFallingAnimation(findViewById(R.id.fallingRock));  // 4 seconds duration, 1 second delay
-        createFallingAnimation(findViewById(R.id.fallingApple));  // the following were added by Sage, sorry if I messed stuff up
+        createFallingAnimation(findViewById(R.id.fallingCarrot));
+        createFallingAnimation(findViewById(R.id.fallingBeet));
+        createFallingAnimation(findViewById(R.id.fallingRock));
+        createFallingAnimation(findViewById(R.id.fallingApple));
         createFallingAnimation(findViewById(R.id.fallingMelon));
         createFallingAnimation(findViewById(R.id.fallingOrange));
 
+//        gardenButton = findViewById(R.id.button1);
+//        gardenButton.setOnClickListener(this::startGarden);
+
+
+        livesTextView = findViewById(R.id.lives);
+        updateLivesDisplay();
+
+        startTime = System.currentTimeMillis(); // Start time of the game
+
+
     }
 
+
+    private void updateLivesDisplay() {
+        livesTextView.setText(String.valueOf(lives));
+    }
+
+    public void startGarden() {
+        Intent intent = new Intent(this, ActivityGarden.class);
+        startActivity(intent);
+    }
 
 
     private void createFallingAnimation(View fallingObject) {
         fallingObjects.add(fallingObject);
 
-        ObjectAnimator animation = ObjectAnimator.ofFloat(fallingObject, "translationY", 0f, (float)screenHeight);
+        ObjectAnimator animation = ObjectAnimator.ofFloat(fallingObject, "translationY", 0f, 2100f);
 
         // Change the X position, speed, or any other property for variety
         float initialX = (float) (Math.random() * screenWidth);
         fallingObject.setX(initialX);
 
+
+
+
         long initialDuration = (long) (2000 + Math.random() * 2000);
-        animation.setDuration(initialDuration);
+
+        long elapsedTime = System.currentTimeMillis() - startTime;
+
+        // Adjust the duration based on the elapsed time to make objects fall faster
+        long durationReduction = elapsedTime / 10000; // e.g., reduce duration every 10 seconds
+        long maxDurationReduction = 1000; // Maximum reduction in duration
+        durationReduction = Math.min(durationReduction, maxDurationReduction);
+
+        // Ensure that the animation duration is not less than a minimum value
+        long minDuration = 1000; // Minimum duration of 1 second
+        long newDuration = initialDuration - durationReduction;
+        newDuration = Math.max(newDuration, minDuration);
+
+
+        animation.setDuration(newDuration);
 
         // Use a Handler to start the animation after a random initial delay
         long initialDelay = (long) (3000 + Math.random() * 1000);
@@ -137,7 +173,7 @@ public class ActivityTiltGame extends AppCompatActivity {
 
             // Move the box left or right based on this value
 //            ImageView box = findViewById(R.id.box);
-            float newX = box.getX() - x * 3; // Multiplied by 3 for sensitivity, adjust as needed
+            float newX = box.getX() - x * 2; // Multiplied by 5 for sensitivity, adjust as needed
 
             // Ensure box does not move off the screen
             if (newX < 0) {
@@ -154,7 +190,7 @@ public class ActivityTiltGame extends AppCompatActivity {
 
             for (View collisionObject : fallingObjects) {
                 if (collisionObject.getVisibility() == View.VISIBLE &&
-                        collisionObject.getY() + collisionObject.getHeight() >= (box.getTop() + 20f ) &&
+                        collisionObject.getY() + collisionObject.getHeight() >= box.getTop() &&
                         collisionObject.getY() <= box.getBottom() && // Ensure object is within screen bounds
                         box.getX() + box.getWidth() > collisionObject.getX() &&
                         box.getX() < collisionObject.getX() + collisionObject.getWidth()) {
@@ -164,17 +200,25 @@ public class ActivityTiltGame extends AppCompatActivity {
                     if (!isCollision) {
                         //                    Toast.makeText(MainActivity.this, "collected", Toast.LENGTH_LONG).show();
 
-                        if(collisionObject.getId() == rockId){
-                            int oldLives = Integer.parseInt(lives.getText().toString());
-                            oldLives--;
-                            lives.setText(String.valueOf(oldLives));
-                        }
-                        else{
-                            oldScore = Integer.parseInt(score.getText().toString());
-                            oldScore++;
-                            score.setText(String.valueOf(oldScore));
+                        // Inside the collision detection loop in onSensorChanged
+                        if (collisionObject.getId() == R.id.fallingRock && collisionObject.getVisibility() == View.VISIBLE) {
+                            // Reduce the number of lives
+                            lives--;
+                            updateLivesDisplay();
+
+                            // Check if the game is over
+                            if (lives <= 0) {
+                                // Handle game over
+                                startGarden();
+                            }
+
+                            // Since the player has collided with the rock, make it invisible
+                            collisionObject.setVisibility(View.INVISIBLE);
                         }
 
+                        oldScore = Integer.parseInt(score.getText().toString());
+                        oldScore++;
+                        score.setText(String.valueOf(oldScore));
 
                         // Set the flag to indicate a collision
                         isCollision = true;
@@ -208,14 +252,6 @@ public class ActivityTiltGame extends AppCompatActivity {
         super.onPause();
         sensorManager.unregisterListener(sensorListener);
     }
-
-
-
-
-
-
-
-
 
 
 
