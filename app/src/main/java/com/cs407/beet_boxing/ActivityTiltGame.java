@@ -15,7 +15,6 @@ package com.cs407.beet_boxing;
         import android.util.DisplayMetrics;
         import android.view.View;
         import android.animation.ObjectAnimator;
-        import android.widget.Button;
         import android.widget.ImageView;
         import android.widget.TextView;
         import android.os.Handler;
@@ -87,8 +86,8 @@ public class ActivityTiltGame extends AppCompatActivity {
         livesTextView.setText(String.valueOf(lives));
     }
 
-    public void startGarden() {
-        Intent intent = new Intent(this, ActivityGarden.class);
+    public void startResultScreen() {
+        Intent intent = new Intent(this, ResultsActivity.class);
         startActivity(intent);
     }
 
@@ -209,7 +208,7 @@ public class ActivityTiltGame extends AppCompatActivity {
                             // Check if the game is over
                             if (lives <= 0) {
                                 // Handle game over
-                                startGarden();
+                                startResultScreen();
                             }
 
                             // Since the player has collided with the rock, make it invisible
