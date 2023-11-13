@@ -33,7 +33,11 @@ public class ActivityTiltGame extends AppCompatActivity {
     private int oldScore;
     private boolean isCollision;
     private int screenWidth;
-    private Button gardenButton;
+//    private Button gardenButton;
+    private int lives = 3;
+    private TextView livesTextView;
+    private long startTime;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,19 +63,31 @@ public class ActivityTiltGame extends AppCompatActivity {
 
         fallingObjects = new ArrayList<>();
 
-        createFallingAnimation(findViewById(R.id.fallingCarrot));  // 3 seconds duration, 0 delay
-        createFallingAnimation(findViewById(R.id.fallingBeet));  // 3.5 seconds duration, 0.5 second delay
-        createFallingAnimation(findViewById(R.id.fallingRock));  // 4 seconds duration, 1 second delay
+        createFallingAnimation(findViewById(R.id.fallingCarrot));
+        createFallingAnimation(findViewById(R.id.fallingBeet));
+        createFallingAnimation(findViewById(R.id.fallingRock));
         createFallingAnimation(findViewById(R.id.fallingApple));
         createFallingAnimation(findViewById(R.id.fallingMelon));
         createFallingAnimation(findViewById(R.id.fallingOrange));
 
-        gardenButton = findViewById(R.id.button1);
-        gardenButton.setOnClickListener(this::startGarden);
+//        gardenButton = findViewById(R.id.button1);
+//        gardenButton.setOnClickListener(this::startGarden);
+
+
+        livesTextView = findViewById(R.id.lives);
+        updateLivesDisplay();
+
+        startTime = System.currentTimeMillis(); // Start time of the game
+
 
     }
 
-    public void startGarden(View view) {
+
+    private void updateLivesDisplay() {
+        livesTextView.setText(String.valueOf(lives));
+    }
+
+    public void startGarden() {
         Intent intent = new Intent(this, ActivityGarden.class);
         startActivity(intent);
     }
@@ -86,8 +102,25 @@ public class ActivityTiltGame extends AppCompatActivity {
         float initialX = (float) (Math.random() * screenWidth);
         fallingObject.setX(initialX);
 
+
+
+
         long initialDuration = (long) (2000 + Math.random() * 2000);
-        animation.setDuration(initialDuration);
+
+        long elapsedTime = System.currentTimeMillis() - startTime;
+
+        // Adjust the duration based on the elapsed time to make objects fall faster
+        long durationReduction = elapsedTime / 10000; // e.g., reduce duration every 10 seconds
+        long maxDurationReduction = 1000; // Maximum reduction in duration
+        durationReduction = Math.min(durationReduction, maxDurationReduction);
+
+        // Ensure that the animation duration is not less than a minimum value
+        long minDuration = 1000; // Minimum duration of 1 second
+        long newDuration = initialDuration - durationReduction;
+        newDuration = Math.max(newDuration, minDuration);
+
+
+        animation.setDuration(newDuration);
 
         // Use a Handler to start the animation after a random initial delay
         long initialDelay = (long) (3000 + Math.random() * 1000);
@@ -167,6 +200,22 @@ public class ActivityTiltGame extends AppCompatActivity {
                     if (!isCollision) {
                         //                    Toast.makeText(MainActivity.this, "collected", Toast.LENGTH_LONG).show();
 
+                        // Inside the collision detection loop in onSensorChanged
+                        if (collisionObject.getId() == R.id.fallingRock && collisionObject.getVisibility() == View.VISIBLE) {
+                            // Reduce the number of lives
+                            lives--;
+                            updateLivesDisplay();
+
+                            // Check if the game is over
+                            if (lives <= 0) {
+                                // Handle game over
+                                startGarden();
+                            }
+
+                            // Since the player has collided with the rock, make it invisible
+                            collisionObject.setVisibility(View.INVISIBLE);
+                        }
+
                         oldScore = Integer.parseInt(score.getText().toString());
                         oldScore++;
                         score.setText(String.valueOf(oldScore));
@@ -203,14 +252,6 @@ public class ActivityTiltGame extends AppCompatActivity {
         super.onPause();
         sensorManager.unregisterListener(sensorListener);
     }
-
-
-
-
-
-
-
-
 
 
 
