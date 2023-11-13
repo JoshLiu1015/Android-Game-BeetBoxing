@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityTiltGame" >
+
+
+
+
+    <ImageView
+        android:id="@+id/box"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/box" />
+
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="0dp"
+        android:textSize="50dp"
+        android:textAlignment="center"
+        android:text="0" />
+
+
+    <TextView
+        android:id="@+id/scoreText"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/score"
+        android:layout_marginRight="0dp"
+        android:text="score"
+        android:textAlignment="center"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/lives"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp"
+        android:text="3"
+        android:textAlignment="center"
+        android:textSize="50dp" />
+
+    <TextView
+        android:id="@+id/livesText"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/lives"
+        android:layout_marginLeft="0dp"
+        android:text="lives"
+        android:textAlignment="center"
+        android:textSize="20dp" />
+
+    <ImageView
+        android:id="@+id/fallingCarrot"
+        android:src="@drawable/carrotsmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/fallingBeet"
+        android:src="@drawable/beetsmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/fallingRock"
+        android:src="@drawable/rock"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/fallingApple"
+        android:src="@drawable/applesmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/fallingMelon"
+        android:src="@drawable/melonsmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/fallingOrange"
+        android:src="@drawable/orangesmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>
