@@ -212,7 +212,7 @@ public class ActivityTiltGame extends AppCompatActivity {
                             if (lives <= 0) {
                                 gameOverLayout.setVisibility(View.VISIBLE);
                                 // Handle game over
-//                                startGarden();
+                                startGarden();
                             }
 
                             // Since the player has collided with the rock, make it invisible
