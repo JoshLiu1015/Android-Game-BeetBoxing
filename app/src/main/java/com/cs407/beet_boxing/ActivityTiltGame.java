@@ -37,6 +37,7 @@ public class ActivityTiltGame extends AppCompatActivity {
     private int lives = 3;
     private TextView livesTextView;
     private long startTime;
+    private View gameOverLayout;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -79,7 +80,8 @@ public class ActivityTiltGame extends AppCompatActivity {
 
         startTime = System.currentTimeMillis(); // Start time of the game
 
-
+        gameOverLayout = findViewById(R.id.game_over_layout);
+        System.out.println(gameOverLayout);
     }
 
 
@@ -208,6 +210,7 @@ public class ActivityTiltGame extends AppCompatActivity {
 
                             // Check if the game is over
                             if (lives <= 0) {
+                                gameOverLayout.setVisibility(View.VISIBLE);
                                 // Handle game over
                                 startGarden();
                             }
@@ -252,7 +255,6 @@ public class ActivityTiltGame extends AppCompatActivity {
         super.onPause();
         sensorManager.unregisterListener(sensorListener);
     }
-
 
 
 }
