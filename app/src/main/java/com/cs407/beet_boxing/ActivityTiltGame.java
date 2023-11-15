@@ -222,13 +222,13 @@ public class ActivityTiltGame extends AppCompatActivity {
                             collisionObject.setVisibility(View.INVISIBLE);
                         }
 
-                        oldScore = Integer.parseInt(score.getText().toString());
-                        oldScore++;
-                        score.setText(String.valueOf(oldScore));
-
-                        // Add this produce to our internal collected state
                         EnumProduceType produceType = EnumProduceType.getById(collisionObject.getId());
                         if (produceType != null) {
+                            oldScore = Integer.parseInt(score.getText().toString());
+                            oldScore++;
+                            score.setText(String.valueOf(oldScore));
+
+                            // Add this produce to our internal collected state
                             int previousAmount = collected.getOrDefault(produceType, 0);
                             collected.put(produceType, previousAmount + 1);
                         }
