@@ -16,7 +16,7 @@ import com.google.gson.GsonBuilder;
  */
 public class PersistentInfo {
 
-    private static final Gson GSON = new GsonBuilder()
+    public static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .create();
 

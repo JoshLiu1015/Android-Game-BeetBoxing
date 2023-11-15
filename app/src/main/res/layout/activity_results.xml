@@ -207,7 +207,7 @@
               android:layout_width="163dp"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:src="@drawable/beet" />
+              android:src="@drawable/banana" />
 
           <TextView
               android:id="@+id/bananaResultAmount"
@@ -233,7 +233,7 @@
               android:layout_width="163dp"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:src="@drawable/beet" />
+              android:src="@drawable/potato" />
 
           <TextView
               android:id="@+id/potatoResultAmount"
@@ -259,7 +259,7 @@
               android:layout_width="163dp"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:src="@drawable/beet" />
+              android:src="@drawable/onion" />
 
           <TextView
               android:id="@+id/onionResultAmount"
@@ -285,7 +285,7 @@
               android:layout_width="163dp"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:src="@drawable/beet" />
+              android:src="@drawable/ginger" />
 
           <TextView
               android:id="@+id/gingerResultAmount"
