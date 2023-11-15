@@ -81,13 +81,15 @@ public class ActivityTiltGame extends AppCompatActivity {
 
     }
 
-
     private void updateLivesDisplay() {
         livesTextView.setText(String.valueOf(lives));
     }
 
     public void startResultScreen() {
         Intent intent = new Intent(this, ResultsActivity.class);
+        intent.putExtra("score", oldScore);
+        // TODO: provide an instance variable with a map of collected produce types
+        // Map<EnumProduceType, Integer> collected = ...
         startActivity(intent);
     }
 

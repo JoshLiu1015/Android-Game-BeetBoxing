@@ -32,11 +32,19 @@
         android:textSize="34sp" />
 
     <TextView
-        android:id="@+id/timeSpent"
+        android:id="@+id/score"
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:gravity="center"
-        android:text="Time Spent: 0s"
+        android:text="Score: 0"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/highScore"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:gravity="center"
+        android:text="(Best: 0)"
         android:textSize="20sp" />
 
     <TextView

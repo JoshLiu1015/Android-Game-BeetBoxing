@@ -3,6 +3,7 @@ package com.cs407.beet_boxing;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ClipData;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.view.DragEvent;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.util.HashMap;
 
@@ -43,15 +45,13 @@ public class ActivityGarden extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_garden);
 
+        Button newGameButton = findViewById(R.id.newGameButton);
+        newGameButton.setOnClickListener(e -> startActivity(new Intent(this, ActivityTiltGame.class)));
 
-
-
-
-
-
+        ImageView settings = findViewById(R.id.settings);
+        settings.setOnClickListener(e -> startActivity(new Intent(this, SettingsActivity.class)));
 
         editMenuLayout = findViewById(R.id.edit_menu_layout);
-
 
         // Set click listener to show the edit menu
         Button editButton = findViewById(R.id.edit);
@@ -102,8 +102,6 @@ public class ActivityGarden extends AppCompatActivity {
         produceIcon8 = editMenuLayout.findViewById(R.id.produce_icon_8);
         produceIcon9 = editMenuLayout.findViewById(R.id.produce_icon_9);
 
-
-
         // Create the OnTouchListener
         View.OnTouchListener touchListener = new View.OnTouchListener() {
             @Override
@@ -129,9 +127,6 @@ public class ActivityGarden extends AppCompatActivity {
         produceIcon7.setOnTouchListener(touchListener);
         produceIcon8.setOnTouchListener(touchListener);
         produceIcon9.setOnTouchListener(touchListener);
-
-
-
 
         View.OnDragListener dragListener = new View.OnDragListener() {
             @Override
@@ -182,10 +177,6 @@ public class ActivityGarden extends AppCompatActivity {
             }
         };
 
-
-
-
-
         buttonProduce1.setOnDragListener(dragListener);
         buttonProduce2.setOnDragListener(dragListener);
         buttonProduce3.setOnDragListener(dragListener);
@@ -199,8 +190,6 @@ public class ActivityGarden extends AppCompatActivity {
 
         // Initialize mediaPlayers HashMap
         mediaPlayers = new HashMap<>();
-
-
 
 //        // Set click listeners
 //        buttonProduce1.setOnClickListener(new View.OnClickListener() {
