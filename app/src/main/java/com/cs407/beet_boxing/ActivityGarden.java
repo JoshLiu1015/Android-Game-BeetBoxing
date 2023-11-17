@@ -3,6 +3,7 @@ package com.cs407.beet_boxing;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ClipData;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.view.DragEvent;
@@ -54,7 +55,7 @@ public class ActivityGarden extends AppCompatActivity {
 
 
         // Set click listener to show the edit menu
-        Button editButton = findViewById(R.id.edit);
+        Button editButton = findViewById(R.id.record);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,6 +69,7 @@ public class ActivityGarden extends AppCompatActivity {
                 }
             }
         });
+
 
         // Initialize buttons
         buttonProduce1 = findViewById(R.id.button_produce1);
@@ -224,6 +226,11 @@ public class ActivityGarden extends AppCompatActivity {
 //            }
 //        });
 
+    }
+
+    public void practice_mode(){
+        Intent intent = new Intent(this, RecordingMode.class);
+        startActivity(intent);
     }
 
 
