@@ -4,10 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.cs407.beet_boxing.persistence.PersistentInfo;
+import com.cs407.beet_boxing.util.EnumControlScheme;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -21,20 +26,21 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
         backButton = findViewById(R.id.backButton);
-        // TODO: add functionality
         replayButton = findViewById(R.id.replayButton);
+
         seekBarVolume = findViewById(R.id.seekBarVolume);
+        seekBarVolume.setMax(15);
+        seekBarVolume.setMin(0);
+
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         int curVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-
         backButton.setOnClickListener(view -> backToMain());
-
-        // TODO: make this save to preferences
+        seekBarVolume.setProgress(curVolume);
         seekBarVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0 );
+                PersistentInfo.config.volume = progress;
             }
 
             @Override
@@ -48,11 +54,16 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        Switch controlSchemeSwitch = findViewById(R.id.switch3);
+        controlSchemeSwitch.setChecked(PersistentInfo.config.controlScheme == EnumControlScheme.DRAG);
+        controlSchemeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            PersistentInfo.config.controlScheme = isChecked ? EnumControlScheme.DRAG : EnumControlScheme.TILT;
+            Log.i("INFO", "control scheme: " + (isChecked ? "Drag" : "Tilt"));
+        });
     }
 
     public void backToMain(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
-
 }

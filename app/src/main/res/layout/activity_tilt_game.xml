@@ -79,13 +79,6 @@
         android:layout_centerHorizontal="true" />
 
     <ImageView
-        android:id="@+id/fallingRock"
-        android:src="@drawable/rock"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"/>
-
-    <ImageView
         android:id="@+id/fallingApple"
         android:src="@drawable/applesmall"
         android:layout_width="50dp"
@@ -106,9 +99,43 @@
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"/>
 
-<!--    <Button-->
-<!--        android:id="@+id/button1"-->
-<!--        android:layout_width="wrap_content"-->
+    <ImageView
+        android:id="@+id/fallingPotato"
+        android:src="@drawable/potatosmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/fallingBanana"
+        android:src="@drawable/bananasmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/fallingGinger"
+        android:src="@drawable/gingersmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/fallingOnion"
+        android:src="@drawable/onionsmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/fallingRock"
+        android:src="@drawable/rock"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"/>
+    <!--    <Button-->
+    <!--        android:id="@+id/button1"-->
+    <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->
 <!--        android:layout_marginTop="100dp"-->
 <!--        android:text="Button" />-->

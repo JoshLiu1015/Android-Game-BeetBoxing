@@ -16,7 +16,7 @@ import com.google.gson.GsonBuilder;
  */
 public class PersistentInfo {
 
-    private static final Gson GSON = new GsonBuilder()
+    public static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .create();
 
@@ -30,6 +30,10 @@ public class PersistentInfo {
      * @return status code
      */
     public static int init(Context context) {
+        if (config != null) {
+            return 3;
+        }
+
         int result = 0;
         SharedPreferences preferences = preferences(context);
         try {

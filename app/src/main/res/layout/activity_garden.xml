@@ -12,10 +12,12 @@
         android:id="@+id/garden_grid"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_marginTop="170dp"
         android:columnCount="3"
         android:paddingHorizontal="20dp"
         android:paddingVertical="20dp"
-        android:layout_marginTop="170dp"
         android:rowCount="3"
         app:layout_constraintBottom_toTopOf="@+id/edit"
         app:layout_constraintEnd_toEndOf="parent"
@@ -149,14 +151,27 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/newGameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Button"
+        android:text="New Game"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/settings"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/garden_grid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.923"
+        app:layout_constraintStart_toEndOf="@+id/newGameButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8"
+        app:srcCompat="@drawable/settings" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
