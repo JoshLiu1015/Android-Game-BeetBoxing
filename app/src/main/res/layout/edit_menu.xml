@@ -9,6 +9,9 @@
     android:background="@color/cardview_light_background"
     android:id="@+id/edit_menu_layout">
 
+<!--    when the layout is included in another layout, such as activity_garden.xml-->
+<!--    it sets to android:visibility="gone"-->
+
     <GridLayout
         android:id="@+id/edit_menu_grid"
         android:layout_width="0dp"
@@ -21,104 +24,352 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="MissingConstraints">
 
-        <ImageButton
-            android:id="@+id/produce_icon_1"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/beet"
-            android:contentDescription="@string/produce_button_description"
-            android:scaleType="fitCenter"/>
+            android:layout_margin="5dp" >
 
-        <ImageButton
-            android:id="@+id/produce_icon_2"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/apple"
-            android:contentDescription="@string/produce_button_description"
-            android:scaleType="fitCenter"/>
+            <ImageButton
+                android:id="@+id/icon_carrot"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/carrot"
+                android:contentDescription="@string/produce_button_description"
+                android:scaleType="fitCenter"/>
 
-        <ImageButton
-            android:id="@+id/produce_icon_3"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/beet"
-            android:contentDescription="@string/produce_button_description"
-            android:scaleType="fitCenter"/>
+            <TextView
+                android:id="@+id/number_carrot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:padding="4dp"
+                android:text="0"
+                android:layout_marginLeft="15dp"
+                android:textSize="20sp" />
 
-        <ImageButton
-            android:id="@+id/produce_icon_4"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/carrot"
-            android:contentDescription="@string/produce_button_description"
-            android:scaleType="fitCenter"/>
+            <TextView
+                android:id="@+id/countdown_carrot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:padding="4dp"
+                android:text=""
+                android:layout_marginRight="15dp"
+                android:textSize="20sp" />
+        </FrameLayout>
 
-        <ImageButton
-            android:id="@+id/produce_icon_5"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/orange"
-            android:contentDescription="@string/produce_button_description"
-            android:scaleType="fitCenter"/>
 
-        <ImageButton
-            android:id="@+id/produce_icon_6"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/melon"
-            android:contentDescription="@string/produce_button_description"
-            android:scaleType="fitCenter"/>
 
-        <ImageButton
-            android:id="@+id/produce_icon_7"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/beet"
-            android:contentDescription="@string/produce_button_description"
-            android:scaleType="fitCenter"/>
+            android:layout_margin="5dp">
 
-        <ImageButton
-            android:id="@+id/produce_icon_8"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/beet"
-            android:contentDescription="@string/produce_button_description"
-            android:scaleType="fitCenter"/>
+            <ImageButton
+                android:id="@+id/icon_banana"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/banana"
+                android:contentDescription="@string/produce_button_description"
+                android:scaleType="fitCenter"/>
 
-        <ImageButton
-            android:id="@+id/produce_icon_9"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            <TextView
+                android:id="@+id/number_banana"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:padding="4dp"
+                android:text="0"
+                android:layout_marginLeft="15dp"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/countdown_banana"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:padding="4dp"
+                android:text=""
+                android:layout_marginRight="15dp"
+                android:textSize="20sp" />
+        </FrameLayout>
+
+
+
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
-            android:layout_margin="10dp"
-            android:src="@drawable/beet"
-            android:contentDescription="@string/produce_button_description"
-            android:scaleType="fitCenter"/>
+            android:layout_margin="5dp">
+
+            <ImageButton
+                android:id="@+id/icon_apple"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/apple"
+                android:contentDescription="@string/produce_button_description"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:id="@+id/number_apple"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:padding="4dp"
+                android:text="0"
+                android:layout_marginLeft="15dp"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/countdown_apple"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:padding="4dp"
+                android:text=""
+                android:layout_marginRight="15dp"
+                android:textSize="20sp" />
+        </FrameLayout>
+
+
+
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="5dp">
+
+            <ImageButton
+                android:id="@+id/icon_potato"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/potato"
+                android:contentDescription="@string/produce_button_description"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:id="@+id/number_potato"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:padding="4dp"
+                android:text="0"
+                android:layout_marginLeft="15dp"
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:id="@+id/countdown_potato"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:padding="4dp"
+                android:text=""
+                android:layout_marginRight="15dp"
+                android:textSize="20sp" />
+        </FrameLayout>
+
+
+
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="5dp">
+
+            <ImageButton
+                android:id="@+id/icon_onion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/onion"
+                android:contentDescription="@string/produce_button_description"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:id="@+id/number_onion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:padding="4dp"
+                android:text="0"
+                android:layout_marginLeft="15dp"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/countdown_onion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:padding="4dp"
+                android:text=""
+                android:layout_marginRight="15dp"
+                android:textSize="20sp" />
+        </FrameLayout>
+
+
+
+
+
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="5dp">
+
+            <ImageButton
+                android:id="@+id/icon_orange"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/orange"
+                android:contentDescription="@string/produce_button_description"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:id="@+id/number_orange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:padding="4dp"
+                android:text="0"
+                android:layout_marginLeft="15dp"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/countdown_orange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:padding="4dp"
+                android:text=""
+                android:layout_marginRight="15dp"
+                android:textSize="20sp" />
+        </FrameLayout>
+
+
+
+
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="5dp">
+
+            <ImageButton
+                android:id="@+id/icon_melon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/melon"
+                android:contentDescription="@string/produce_button_description"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:id="@+id/number_melon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:padding="4dp"
+                android:text="0"
+                android:layout_marginLeft="15dp"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/countdown_melon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:padding="4dp"
+                android:text=""
+                android:layout_marginRight="15dp"
+                android:textSize="20sp" />
+        </FrameLayout>
+
+
+
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="5dp">
+
+            <ImageButton
+                android:id="@+id/icon_ginger"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ginger"
+                android:contentDescription="@string/produce_button_description"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:id="@+id/number_ginger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:padding="4dp"
+                android:text="0"
+                android:layout_marginLeft="15dp"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/countdown_ginger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:padding="4dp"
+                android:text=""
+                android:layout_marginRight="15dp"
+                android:textSize="20sp" />
+        </FrameLayout>
+
+
+
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="5dp">
+
+            <ImageButton
+                android:id="@+id/icon_beet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/beet"
+                android:contentDescription="@string/produce_button_description"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:id="@+id/number_beet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:padding="4dp"
+                android:text="0"
+                android:layout_marginLeft="15dp"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/countdown_beet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:padding="4dp"
+                android:text=""
+                android:layout_marginRight="15dp"
+                android:textSize="20sp" />
+        </FrameLayout>
+
+
+
 
 
 
