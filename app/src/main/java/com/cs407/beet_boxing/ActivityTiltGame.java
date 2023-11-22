@@ -1,5 +1,7 @@
 package com.cs407.beet_boxing;
 
+        import static com.cs407.beet_boxing.persistence.PersistentInfo.GSON;
+
         import androidx.appcompat.app.AppCompatActivity;
 
         import android.animation.Animator;
@@ -15,13 +17,17 @@ package com.cs407.beet_boxing;
         import android.util.DisplayMetrics;
         import android.view.View;
         import android.animation.ObjectAnimator;
-        import android.widget.Button;
         import android.widget.ImageView;
         import android.widget.TextView;
         import android.os.Handler;
 
+        import com.cs407.beet_boxing.util.DummyInventory;
+        import com.cs407.beet_boxing.util.EnumProduceType;
+
         import java.util.ArrayList;
+        import java.util.HashMap;
         import java.util.List;
+        import java.util.Map;
 
 public class ActivityTiltGame extends AppCompatActivity {
 
@@ -39,11 +45,11 @@ public class ActivityTiltGame extends AppCompatActivity {
     private long startTime;
     private View gameOverLayout;
 
+    private final Map<EnumProduceType, Integer> collected = new HashMap<>();
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Intent intent=getIntent();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tilt_game);
 
@@ -84,13 +90,15 @@ public class ActivityTiltGame extends AppCompatActivity {
         System.out.println(gameOverLayout);
     }
 
-
     private void updateLivesDisplay() {
         livesTextView.setText(String.valueOf(lives));
     }
 
-    public void startGarden() {
-        Intent intent = new Intent(this, ActivityGarden.class);
+    public void startResultScreen() {
+        Intent intent = new Intent(this, ResultsActivity.class);
+        intent.putExtra("score", oldScore);
+        intent.putExtra("collected", GSON.toJson(new DummyInventory(collected)));
+
         startActivity(intent);
     }
 
@@ -103,9 +111,6 @@ public class ActivityTiltGame extends AppCompatActivity {
         // Change the X position, speed, or any other property for variety
         float initialX = (float) (Math.random() * screenWidth);
         fallingObject.setX(initialX);
-
-
-
 
         long initialDuration = (long) (2000 + Math.random() * 2000);
 
@@ -120,7 +125,6 @@ public class ActivityTiltGame extends AppCompatActivity {
         long minDuration = 1000; // Minimum duration of 1 second
         long newDuration = initialDuration - durationReduction;
         newDuration = Math.max(newDuration, minDuration);
-
 
         animation.setDuration(newDuration);
 
@@ -186,7 +190,6 @@ public class ActivityTiltGame extends AppCompatActivity {
 
             box.setX(newX);
 
-
 //            ImageView fallingObject = findViewById(R.id.falling_object);
 //            TextView score = findViewById(R.id.score);
 
@@ -212,16 +215,23 @@ public class ActivityTiltGame extends AppCompatActivity {
                             if (lives <= 0) {
                                 gameOverLayout.setVisibility(View.VISIBLE);
                                 // Handle game over
-                                startGarden();
+                                startResultScreen();
                             }
 
                             // Since the player has collided with the rock, make it invisible
                             collisionObject.setVisibility(View.INVISIBLE);
                         }
 
-                        oldScore = Integer.parseInt(score.getText().toString());
-                        oldScore++;
-                        score.setText(String.valueOf(oldScore));
+                        EnumProduceType produceType = EnumProduceType.getById(collisionObject.getId());
+                        if (produceType != null) {
+                            oldScore = Integer.parseInt(score.getText().toString());
+                            oldScore++;
+                            score.setText(String.valueOf(oldScore));
+
+                            // Add this produce to our internal collected state
+                            int previousAmount = collected.getOrDefault(produceType, 0);
+                            collected.put(produceType, previousAmount + 1);
+                        }
 
                         // Set the flag to indicate a collision
                         isCollision = true;
