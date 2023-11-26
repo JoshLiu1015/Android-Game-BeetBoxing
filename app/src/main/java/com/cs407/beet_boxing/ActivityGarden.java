@@ -215,7 +215,8 @@ public class ActivityGarden extends AppCompatActivity {
 
     }
 
-
+//should this be changed to use the assets Sage made?? or are we using these?
+//also should we specify specific produce name ids, or use the stored enumerator for id comparison?
     private int getSoundResourceIdForIcon(int iconId) {
         if (iconId == R.id.produce_icon_1) {
             return R.raw.drum_loop;
