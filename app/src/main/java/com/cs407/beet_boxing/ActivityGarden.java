@@ -10,25 +10,24 @@ import static com.cs407.beet_boxing.util.EnumProduceType.ONION;
 import static com.cs407.beet_boxing.util.EnumProduceType.ORANGE;
 import static com.cs407.beet_boxing.util.EnumProduceType.POTATO;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageButton;
-import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.cs407.beet_boxing.persistence.PersistentInfo;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.cs407.beet_boxing.persistence.PersistentInfo;
 
 import java.util.HashMap;
 
@@ -440,6 +439,8 @@ public class ActivityGarden extends AppCompatActivity {
         produceNumBeet.setText(PersistentInfo.gameData.inventory.getOrDefault(BEET, 0).toString());
     }
 
+//should this be changed to use the assets Sage made?? or are we using these?
+//also should we specify specific produce name ids, or use the stored enumerator for id comparison?
     private int getSoundResourceIdForIcon(int iconId) {
         if (iconId == R.id.icon_carrot) {
             return R.raw.drum_loop;
@@ -497,6 +498,3 @@ public class ActivityGarden extends AppCompatActivity {
         mediaPlayers.clear();
     }
 }
-
-
-
