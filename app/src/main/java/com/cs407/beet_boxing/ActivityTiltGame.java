@@ -39,6 +39,7 @@ public class ActivityTiltGame extends AppCompatActivity {
     private int oldScore;
     private boolean isCollision;
     private int screenWidth;
+    private int screenHeight;
 //    private Button gardenButton;
     private int lives = 3;
     private TextView livesTextView;
@@ -56,6 +57,7 @@ public class ActivityTiltGame extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screenWidth = displayMetrics.widthPixels;
+        screenHeight = displayMetrics.heightPixels;
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -76,6 +78,10 @@ public class ActivityTiltGame extends AppCompatActivity {
         createFallingAnimation(findViewById(R.id.fallingApple));
         createFallingAnimation(findViewById(R.id.fallingMelon));
         createFallingAnimation(findViewById(R.id.fallingOrange));
+        createFallingAnimation(findViewById(R.id.fallingPotato));
+        createFallingAnimation(findViewById(R.id.fallingBanana));
+        createFallingAnimation(findViewById(R.id.fallingGinger));
+        createFallingAnimation(findViewById(R.id.fallingOnion));
 
 //        gardenButton = findViewById(R.id.button1);
 //        gardenButton.setOnClickListener(this::startGarden);
@@ -106,7 +112,7 @@ public class ActivityTiltGame extends AppCompatActivity {
     private void createFallingAnimation(View fallingObject) {
         fallingObjects.add(fallingObject);
 
-        ObjectAnimator animation = ObjectAnimator.ofFloat(fallingObject, "translationY", 0f, 2100f);
+        ObjectAnimator animation = ObjectAnimator.ofFloat(fallingObject, "translationY", 0f, screenHeight);
 
         // Change the X position, speed, or any other property for variety
         float initialX = (float) (Math.random() * screenWidth);
@@ -117,7 +123,7 @@ public class ActivityTiltGame extends AppCompatActivity {
         long elapsedTime = System.currentTimeMillis() - startTime;
 
         // Adjust the duration based on the elapsed time to make objects fall faster
-        long durationReduction = elapsedTime / 10000; // e.g., reduce duration every 10 seconds
+        long durationReduction = elapsedTime / 5000; // e.g., reduce duration every 10 seconds
         long maxDurationReduction = 1000; // Maximum reduction in duration
         durationReduction = Math.min(durationReduction, maxDurationReduction);
 
