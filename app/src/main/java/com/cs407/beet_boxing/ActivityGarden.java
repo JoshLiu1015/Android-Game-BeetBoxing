@@ -439,27 +439,26 @@ public class ActivityGarden extends AppCompatActivity {
         produceNumBeet.setText(PersistentInfo.gameData.inventory.getOrDefault(BEET, 0).toString());
     }
 
-//should this be changed to use the assets Sage made?? or are we using these?
-//also should we specify specific produce name ids, or use the stored enumerator for id comparison?
+//Sage edited these to use the new mp3 file assets
     private int getSoundResourceIdForIcon(int iconId) {
         if (iconId == R.id.icon_carrot) {
-            return R.raw.drum_loop;
+            return R.raw.violin_trimmed;
         } else if (iconId == R.id.icon_banana) {
-            return R.raw.electric_guitar;
+            return R.raw.guitar_trimmed;
         } else if (iconId == R.id.icon_apple) {
-            return R.raw.banjo;
+            return R.raw.piano_trimmed;
         } else if (iconId == R.id.icon_potato) {
-            return R.raw.beatbox;
+            return R.raw.drumset2_trimmed;
         } else if (iconId == R.id.icon_onion) {
-            return R.raw.bells;
+            return R.raw.meow_trimmed;
         } else if (iconId == R.id.icon_orange) {
-            return R.raw.blend_beats;
+            return R.raw.stabs_trimmed;
         } else if (iconId == R.id.icon_melon) {
-            return R.raw.piano;
+            return R.raw.xylo_trimmed;
         } else if (iconId == R.id.icon_ginger) {
-            return R.raw.vocal;
+            return R.raw.synth_trimmed;
         } else if (iconId == R.id.icon_beet) {
-            return R.raw.woodwind;
+            return R.raw.drumset1_trimmed;
         } else {
             return -1; // Invalid ID or default sound
         }
