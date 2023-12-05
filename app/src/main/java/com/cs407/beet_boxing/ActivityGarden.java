@@ -34,43 +34,54 @@ import com.cs407.beet_boxing.persistence.PersistentInfo;
 import java.util.HashMap;
 
 public class ActivityGarden extends AppCompatActivity {
-    private ImageButton buttonProduce1;
-    private ImageButton buttonProduce2;
-    private ImageButton buttonProduce3;
-    private ImageButton buttonProduce4;
-    private ImageButton buttonProduce5;
-    private ImageButton buttonProduce6;
-    private ImageButton buttonProduce7;
-    private ImageButton buttonProduce8;
-    private ImageButton buttonProduce9;
 
-    private ImageButton produceIconCarrot;
-    private ImageButton produceIconBanana;
-    private ImageButton produceIconApple;
-    private ImageButton produceIconPotato;
-    private ImageButton produceIconOnion;
-    private ImageButton produceIconOrange;
-    private ImageButton produceIconMelon;
-    private ImageButton produceIconGinger;
-    private ImageButton produceIconBeet;
-
-    private TextView produceNumCarrot;
-    private TextView produceNumBanana;
-    private TextView produceNumApple;
-    private TextView produceNumPotato;
-    private TextView produceNumOnion;
-    private TextView produceNumOrange;
-    private TextView produceNumMelon;
-    private TextView produceNumGinger;
-    private TextView produceNumBeet;
     private HashMap<Integer, MediaPlayer> mediaPlayers;
     private View editMenuLayout;
     private Button closeEditMenuButton;
     private boolean isEditOpen = false;
     private HashMap<Integer, Boolean> cooldownMap = new HashMap<>();
     private long globalStartTime = -1;
-    private SoundPool soundPool;
-    private HashMap<Integer, Integer> soundIds;
+
+    private static final int[] BUTTON_PRODUCE_IDS = {
+            R.id.button_placeholder_1, R.id.button_placeholder_2, R.id.button_placeholder_3,
+            R.id.button_placeholder_4, R.id.button_placeholder_5, R.id.button_placeholder_6,
+            R.id.button_placeholder_7, R.id.button_placeholder_8, R.id.button_placeholder_9
+    };
+
+    private static final int[] ICON_IDS = {
+            R.id.icon_carrot, R.id.icon_banana, R.id.icon_apple,
+            R.id.icon_potato, R.id.icon_onion, R.id.icon_orange,
+            R.id.icon_melon, R.id.icon_ginger, R.id.icon_beet
+    };
+
+    final com.cs407.beet_boxing.util.EnumProduceType[] PRODUCE_ENUMS = {
+            CARROT, BANANA, APPLE,
+            POTATO, ONION, ORANGE,
+            MELON, GINGER, BEET
+    };
+
+    private static final int[] PRODUCE_NUM_IDS = {
+            R.id.number_carrot, R.id.number_banana, R.id.number_apple,
+            R.id.number_potato, R.id.number_onion, R.id.number_orange,
+            R.id.number_melon, R.id.number_ginger, R.id.number_beet
+    };
+
+    private static final int[] SOUND_RESOURCE_IDS = {
+            R.raw.violin_trimmed, R.raw.guitar_trimmed, R.raw.piano_trimmed,
+            R.raw.drumset2_trimmed, R.raw.meow_trimmed, R.raw.stabs_trimmed,
+            R.raw.xylo_trimmed, R.raw.synth_trimmed, R.raw.drumset1_trimmed
+    };
+
+
+    private static final int[] COUNTDOWN_IDS = {
+            R.id.countdown_carrot, R.id.countdown_banana, R.id.countdown_apple,
+            R.id.countdown_potato, R.id.countdown_onion, R.id.countdown_orange,
+            R.id.countdown_melon, R.id.countdown_ginger, R.id.countdown_beet
+    };
+
+    private ImageButton[] buttonProduces = new ImageButton[BUTTON_PRODUCE_IDS.length];
+    private ImageButton[] produceIcons = new ImageButton[ICON_IDS.length];
+    private TextView[] produceNums = new TextView[ICON_IDS.length];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,21 +89,59 @@ public class ActivityGarden extends AppCompatActivity {
         setContentView(R.layout.activity_garden);
 
 
+        setupUI();
+        setupListeners();
 
+
+        // set numbers next to produce icon indicating how many users have collected
+        setProduceAmount();
+
+
+        for (int id : new int[]{R.id.icon_carrot, R.id.icon_banana, R.id.icon_apple, R.id.icon_potato,
+                R.id.icon_onion, R.id.icon_orange, R.id.icon_melon, R.id.icon_ginger, R.id.icon_beet}) {
+            cooldownMap.put(id, false);
+        }
+    }
+
+    private void setupUI() {
+        editMenuLayout = findViewById(R.id.edit_menu_layout);
+
+
+        // Initialize buttons and placeholders
+        for (int i = 0; i < BUTTON_PRODUCE_IDS.length; i++) {
+            buttonProduces[i] = findViewById(BUTTON_PRODUCE_IDS[i]);
+            buttonProduces[i].setTag(true); // Tag as empty
+        }
+
+        // Initialize produce icons and numbers
+        for (int i = 0; i < ICON_IDS.length; i++) {
+            produceIcons[i] = editMenuLayout.findViewById(ICON_IDS[i]);
+            produceIcons[i].setTag(ICON_IDS[i]); // Tag with its own ID
+
+            produceNums[i] = editMenuLayout.findViewById(PRODUCE_NUM_IDS[i]);
+        }
+
+
+
+
+        // Initialize mediaPlayers HashMap
+        mediaPlayers = new HashMap<>();
+    }
+
+
+
+
+    private void setupListeners() {
         Button newGameButton = findViewById(R.id.newGameButton);
         newGameButton.setOnClickListener(e -> startActivity(new Intent(this, ActivityTiltGame.class)));
-
         ImageView settings = findViewById(R.id.settings);
         settings.setOnClickListener(e -> startActivity(new Intent(this, SettingsActivity.class)));
 
-        editMenuLayout = findViewById(R.id.edit_menu_layout);
+
 
 
         // Set click listener to show the edit menu
         Button editButton = findViewById(R.id.edit);
-
-
-
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,74 +155,7 @@ public class ActivityGarden extends AppCompatActivity {
             }
         });
 
-//        ImageButton[] buttonProduceArray = new ImageButton[]{buttonProduce1, buttonProduce2, buttonProduce3,
-//                buttonProduce4, buttonProduce5, buttonProduce6,
-//                buttonProduce7, buttonProduce8, buttonProduce9};
 
-        Integer[] iconArray = new Integer[]{R.id.icon_carrot, R.id.icon_banana, R.id.icon_apple,
-                R.id.icon_potato, R.id.icon_onion, R.id.icon_orange,
-                R.id.icon_melon, R.id.icon_ginger, R.id.icon_beet};
-
-
-        // Initialize buttons
-        buttonProduce1 = findViewById(R.id.button_placeholder_1);
-        buttonProduce2 = findViewById(R.id.button_placeholder_2);
-        buttonProduce3 = findViewById(R.id.button_placeholder_3);
-        buttonProduce4 = findViewById(R.id.button_placeholder_4);
-        buttonProduce5 = findViewById(R.id.button_placeholder_5);
-        buttonProduce6 = findViewById(R.id.button_placeholder_6);
-        buttonProduce7 = findViewById(R.id.button_placeholder_7);
-        buttonProduce8 = findViewById(R.id.button_placeholder_8);
-        buttonProduce9 = findViewById(R.id.button_placeholder_9);
-
-        // Initialize placeholders as empty
-        buttonProduce1.setTag(true);
-        buttonProduce2.setTag(true);
-        buttonProduce3.setTag(true);
-        buttonProduce4.setTag(true);
-        buttonProduce5.setTag(true);
-        buttonProduce6.setTag(true);
-        buttonProduce7.setTag(true);
-        buttonProduce8.setTag(true);
-        buttonProduce9.setTag(true);
-
-
-        produceIconCarrot = editMenuLayout.findViewById(R.id.icon_carrot);
-        produceIconBanana = editMenuLayout.findViewById(R.id.icon_banana);
-        produceIconApple = editMenuLayout.findViewById(R.id.icon_apple);
-        produceIconPotato = editMenuLayout.findViewById(R.id.icon_potato);
-        produceIconOnion = editMenuLayout.findViewById(R.id.icon_onion);
-        produceIconOrange = editMenuLayout.findViewById(R.id.icon_orange);
-        produceIconMelon = editMenuLayout.findViewById(R.id.icon_melon);
-        produceIconGinger = editMenuLayout.findViewById(R.id.icon_ginger);
-        produceIconBeet = editMenuLayout.findViewById(R.id.icon_beet);
-
-        produceIconCarrot.setTag(R.id.icon_carrot);
-        produceIconBanana.setTag(R.id.icon_banana);
-        produceIconApple.setTag(R.id.icon_apple);
-        produceIconPotato.setTag(R.id.icon_potato);
-        produceIconOnion.setTag(R.id.icon_onion);
-        produceIconOrange.setTag(R.id.icon_orange);
-        produceIconMelon.setTag(R.id.icon_melon);
-        produceIconGinger.setTag(R.id.icon_ginger);
-        produceIconBeet.setTag(R.id.icon_beet);
-
-        produceNumCarrot = editMenuLayout.findViewById(R.id.number_carrot);
-        produceNumBanana = editMenuLayout.findViewById(R.id.number_banana);
-        produceNumApple = editMenuLayout.findViewById(R.id.number_apple);
-        produceNumPotato = editMenuLayout.findViewById(R.id.number_potato);
-        produceNumOnion = editMenuLayout.findViewById(R.id.number_onion);
-        produceNumOrange = editMenuLayout.findViewById(R.id.number_orange);
-        produceNumMelon = editMenuLayout.findViewById(R.id.number_melon);
-        produceNumGinger = editMenuLayout.findViewById(R.id.number_ginger);
-        produceNumBeet = editMenuLayout.findViewById(R.id.number_beet);
-
-
-
-
-
-        // set numbers next to produce icon indicating how many users have collected
-        setProduceAmount();
 
 
         // Create the OnTouchListener
@@ -200,34 +182,21 @@ public class ActivityGarden extends AppCompatActivity {
 
 
 
-        // Set the touch listener to all your produce ImageButtons
-        produceIconCarrot.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(CARROT, 0) >= 5 ? touchListener : null);
-        produceIconBanana.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(BANANA, 0) >= 5 ? touchListener : null);
-        produceIconApple.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(APPLE, 0) >= 5 ? touchListener : null);
-        produceIconPotato.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(POTATO, 0) >= 5 ? touchListener : null);
-        produceIconOnion.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(ONION, 0) >= 5 ? touchListener : null);
-        produceIconOrange.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(ORANGE, 0) >= 5 ? touchListener : null);
-        produceIconMelon.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(MELON, 0) >= 5 ? touchListener : null);
-        produceIconGinger.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(GINGER, 0) >= 5 ? touchListener : null);
-        produceIconBeet.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(BEET, 0) >= 5 ? touchListener : null);
-
-        for (int id : new int[]{R.id.icon_carrot, R.id.icon_banana, R.id.icon_apple, R.id.icon_potato,
-                R.id.icon_onion, R.id.icon_orange, R.id.icon_melon, R.id.icon_ginger, R.id.icon_beet}) {
-            cooldownMap.put(id, false);
+        for (int i = 0; i < produceIcons.length; i++) {
+            produceIcons[i].setOnTouchListener(PersistentInfo.gameData.inventory.
+                    getOrDefault(PRODUCE_ENUMS[i], 0) >= 5 ? touchListener : null);
         }
+
 
         View.OnDragListener dragListener = new View.OnDragListener() {
             @Override
             public boolean onDrag(View receivingLayoutView, DragEvent dragEvent) {
                 switch (dragEvent.getAction()) {
                     case DragEvent.ACTION_DRAG_STARTED:
-                        // ...
                         break;
                     case DragEvent.ACTION_DRAG_ENTERED:
-                        // ...
                         break;
                     case DragEvent.ACTION_DRAG_EXITED:
-                        // ...
                         break;
                     case DragEvent.ACTION_DROP:
                         View draggedView = (View) dragEvent.getLocalState();
@@ -270,7 +239,6 @@ public class ActivityGarden extends AppCompatActivity {
 //                        draggedView.setVisibility(View.INVISIBLE);
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
-                        // ...
                         break;
                     default:
                         break;
@@ -279,22 +247,18 @@ public class ActivityGarden extends AppCompatActivity {
             }
         };
 
-        buttonProduce1.setOnDragListener(dragListener);
-        buttonProduce2.setOnDragListener(dragListener);
-        buttonProduce3.setOnDragListener(dragListener);
-        buttonProduce4.setOnDragListener(dragListener);
-        buttonProduce5.setOnDragListener(dragListener);
-        buttonProduce6.setOnDragListener(dragListener);
-        buttonProduce7.setOnDragListener(dragListener);
-        buttonProduce8.setOnDragListener(dragListener);
-        buttonProduce9.setOnDragListener(dragListener);
 
-
-        // Initialize mediaPlayers HashMap
-        mediaPlayers = new HashMap<>();
+        for (ImageButton buttonProduce : buttonProduces) {
+            buttonProduce.setOnDragListener(dragListener);
+        }
 
 
     }
+
+
+
+
+
 
     @Override
     protected void onPause() {
@@ -309,58 +273,21 @@ public class ActivityGarden extends AppCompatActivity {
 
 
 
-    private void continueCooldown(final ImageButton draggedView, final long remainingTime) {
-        // Update the UI immediately to reflect the cooldown state
-        // You might want to disable the view, change its appearance, etc.
-        draggedView.setEnabled(false); // Example: disable the ImageButton during cooldown
-
-        // Schedule the end of the cooldown using a Handler
-        new Handler().postDelayed(() -> {
-            cooldownMap.put(draggedView.getId(), false);
-            runOnUiThread(() -> {
-                // When the cooldown ends, update the UI accordingly
-                // Re-enable the view, reset its appearance, etc.
-                draggedView.setEnabled(true); // Re-enable the ImageButton
-
-                // Since the cooldown has finished, you can now set the onClickListener back to its original state if needed
-                // However, you might need additional logic to determine if it should really be re-enabled, based on your game's rules
-            });
-        }, remainingTime);
-
-        // Start a countdown display if you have a TextView for this purpose
-        TextView countdownView = findCountdownTextViewForButton(draggedView.getId());
-        if (countdownView != null) {
-            startCountdownTimer(countdownView, remainingTime);
-        }
-    }
-
-
 
 
     private TextView findCountdownTextViewForButton(int iconId) {
 
-        if (iconId == R.id.icon_carrot) {
-            return findViewById(R.id.countdown_carrot);
-        } else if (iconId == R.id.icon_banana) {
-            return findViewById(R.id.countdown_banana);
-        } else if (iconId == R.id.icon_apple) {
-            return findViewById(R.id.countdown_apple);
-        } else if (iconId == R.id.icon_potato) {
-            return findViewById(R.id.countdown_potato);
-        } else if (iconId == R.id.icon_onion) {
-            return findViewById(R.id.countdown_onion);
-        } else if (iconId == R.id.icon_orange) {
-            return findViewById(R.id.countdown_orange);
-        } else if (iconId == R.id.icon_melon) {
-            return findViewById(R.id.countdown_melon);
-        } else if (iconId == R.id.icon_ginger) {
-            return findViewById(R.id.countdown_ginger);
-        } else if (iconId == R.id.icon_beet) {
-            return findViewById(R.id.countdown_beet);
+        int index = 0;
+        for (int i = 0; i < produceIcons.length; i++) {
+            if (produceIcons[i].getId() == iconId) {
+                index = i;
+            }
         }
 
-        return null;
+        return findViewById(COUNTDOWN_IDS[index]);
     }
+
+
 
     private void startCountdownTimer(TextView countdownView, long timeInFuture) {
         new CountDownTimer(timeInFuture, 1000) {
@@ -396,8 +323,6 @@ public class ActivityGarden extends AppCompatActivity {
                     }
                     player.release();
                 }
-
-
             });
         }, cooldownTime);
     }
@@ -406,98 +331,39 @@ public class ActivityGarden extends AppCompatActivity {
 
 
     private void reduceProduceNum(int produceId) {
-        if (produceId == R.id.icon_carrot) {
-            int previousAmount = PersistentInfo.gameData.inventory.getOrDefault(CARROT, 0);
-            PersistentInfo.gameData.inventory.put(CARROT, previousAmount - 5);
-            if (PersistentInfo.gameData.inventory.getOrDefault(CARROT, 0) < 5) {
-                produceIconCarrot.setOnTouchListener(null);
-            }
-        } else if (produceId == R.id.icon_banana) {
-            int previousAmount = PersistentInfo.gameData.inventory.getOrDefault(BANANA, 0);
-            PersistentInfo.gameData.inventory.put(BANANA, previousAmount - 5);
-            if (PersistentInfo.gameData.inventory.getOrDefault(BANANA, 0) < 5) {
-                produceIconBanana.setOnTouchListener(null);
-            }
-        } else if (produceId == R.id.icon_apple) {
-            int previousAmount = PersistentInfo.gameData.inventory.getOrDefault(APPLE, 0);
-            PersistentInfo.gameData.inventory.put(APPLE, previousAmount - 5);
-            if (PersistentInfo.gameData.inventory.getOrDefault(APPLE, 0) < 5) {
-                produceIconApple.setOnTouchListener(null);
-            }
-        } else if (produceId == R.id.icon_potato) {
-            int previousAmount = PersistentInfo.gameData.inventory.getOrDefault(POTATO, 0);
-            PersistentInfo.gameData.inventory.put(POTATO, previousAmount - 5);
-            if (PersistentInfo.gameData.inventory.getOrDefault(POTATO, 0) < 5) {
-                produceIconPotato.setOnTouchListener(null);
-            }
-        } else if (produceId == R.id.icon_onion) {
-            int previousAmount = PersistentInfo.gameData.inventory.getOrDefault(ONION, 0);
-            PersistentInfo.gameData.inventory.put(ONION, previousAmount - 5);
-            if (PersistentInfo.gameData.inventory.getOrDefault(ONION, 0) < 5) {
-                produceIconOnion.setOnTouchListener(null);
-            }
-        } else if (produceId == R.id.icon_orange) {
-            int previousAmount = PersistentInfo.gameData.inventory.getOrDefault(ORANGE, 0);
-            PersistentInfo.gameData.inventory.put(ORANGE, previousAmount - 5);
-            if (PersistentInfo.gameData.inventory.getOrDefault(ORANGE, 0) < 5) {
-                produceIconOrange.setOnTouchListener(null);
-            }
-        } else if (produceId == R.id.icon_melon) {
-            int previousAmount = PersistentInfo.gameData.inventory.getOrDefault(MELON, 0);
-            PersistentInfo.gameData.inventory.put(MELON, previousAmount - 5);
-            if (PersistentInfo.gameData.inventory.getOrDefault(MELON, 0) < 5) {
-                produceIconMelon.setOnTouchListener(null);
-            }
-        } else if (produceId == R.id.icon_ginger) {
-            int previousAmount = PersistentInfo.gameData.inventory.getOrDefault(GINGER, 0);
-            PersistentInfo.gameData.inventory.put(GINGER, previousAmount - 5);
-            if (PersistentInfo.gameData.inventory.getOrDefault(GINGER, 0) < 5) {
-                produceIconGinger.setOnTouchListener(null);
-            }
-        } else if (produceId == R.id.icon_beet) {
-            int previousAmount = PersistentInfo.gameData.inventory.getOrDefault(BEET, 0);
-            PersistentInfo.gameData.inventory.put(BEET, previousAmount - 5);
-            if (PersistentInfo.gameData.inventory.getOrDefault(BEET, 0) < 5) {
-                produceIconBeet.setOnTouchListener(null);
+        int index = 0;
+        for (int i = 0; i < produceIcons.length; i++) {
+            if (produceIcons[i].getId() == produceId) {
+                index = i;
             }
         }
+
+        int previousAmount = PersistentInfo.gameData.inventory.getOrDefault(PRODUCE_ENUMS[index], 0);
+        PersistentInfo.gameData.inventory.put(PRODUCE_ENUMS[index], previousAmount - 5);
+        if (PersistentInfo.gameData.inventory.getOrDefault(PRODUCE_ENUMS[index], 0) < 5) {
+            produceIcons[index].setOnTouchListener(null);
+        }
+
     }
 
     private void setProduceAmount() {
-        produceNumCarrot.setText(PersistentInfo.gameData.inventory.getOrDefault(CARROT, 0).toString());
-        produceNumBanana.setText(PersistentInfo.gameData.inventory.getOrDefault(BANANA, 0).toString());
-        produceNumApple.setText(PersistentInfo.gameData.inventory.getOrDefault(APPLE, 0).toString());
-        produceNumPotato.setText(PersistentInfo.gameData.inventory.getOrDefault(POTATO, 0).toString());
-        produceNumOnion.setText(PersistentInfo.gameData.inventory.getOrDefault(ONION, 0).toString());
-        produceNumOrange.setText(PersistentInfo.gameData.inventory.getOrDefault(ORANGE, 0).toString());
-        produceNumMelon.setText(PersistentInfo.gameData.inventory.getOrDefault(MELON, 0).toString());
-        produceNumGinger.setText(PersistentInfo.gameData.inventory.getOrDefault(GINGER, 0).toString());
-        produceNumBeet.setText(PersistentInfo.gameData.inventory.getOrDefault(BEET, 0).toString());
+        for (int i = 0; i < produceNums.length; i++) {
+            produceNums[i].setText(PersistentInfo.gameData.inventory.getOrDefault(PRODUCE_ENUMS[i], 0).toString());
+        }
+
     }
 
 //Sage edited these to use the new mp3 file assets
     private int getSoundResourceIdForIcon(int iconId) {
-        if (iconId == R.id.icon_carrot) {
-            return R.raw.violin_trimmed;
-        } else if (iconId == R.id.icon_banana) {
-            return R.raw.guitar_trimmed;
-        } else if (iconId == R.id.icon_apple) {
-            return R.raw.piano_trimmed;
-        } else if (iconId == R.id.icon_potato) {
-            return R.raw.drumset2_trimmed;
-        } else if (iconId == R.id.icon_onion) {
-            return R.raw.meow_trimmed;
-        } else if (iconId == R.id.icon_orange) {
-            return R.raw.stabs_trimmed;
-        } else if (iconId == R.id.icon_melon) {
-            return R.raw.xylo_trimmed;
-        } else if (iconId == R.id.icon_ginger) {
-            return R.raw.synth_trimmed;
-        } else if (iconId == R.id.icon_beet) {
-            return R.raw.drumset1_trimmed;
-        } else {
-            return -1; // Invalid ID or default sound
+
+        int index = 0;
+        for (int i = 0; i < produceIcons.length; i++) {
+            if (produceIcons[i].getId() == iconId) {
+                index = i;
+            }
         }
+
+        return SOUND_RESOURCE_IDS[index];
     }
 
     private void toggleSound(int soundResourceId, int buttonId, int produceIconId) {
