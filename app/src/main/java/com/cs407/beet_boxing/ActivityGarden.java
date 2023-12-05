@@ -13,7 +13,9 @@ import static com.cs407.beet_boxing.util.EnumProduceType.POTATO;
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.media.AudioAttributes;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -66,12 +68,16 @@ public class ActivityGarden extends AppCompatActivity {
     private Button closeEditMenuButton;
     private boolean isEditOpen = false;
     private HashMap<Integer, Boolean> cooldownMap = new HashMap<>();
-
+    private long globalStartTime = -1;
+    private SoundPool soundPool;
+    private HashMap<Integer, Integer> soundIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_garden);
+
+
 
         Button newGameButton = findViewById(R.id.newGameButton);
         newGameButton.setOnClickListener(e -> startActivity(new Intent(this, ActivityTiltGame.class)));
@@ -84,6 +90,9 @@ public class ActivityGarden extends AppCompatActivity {
 
         // Set click listener to show the edit menu
         Button editButton = findViewById(R.id.edit);
+
+
+
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +105,15 @@ public class ActivityGarden extends AppCompatActivity {
                 }
             }
         });
+
+//        ImageButton[] buttonProduceArray = new ImageButton[]{buttonProduce1, buttonProduce2, buttonProduce3,
+//                buttonProduce4, buttonProduce5, buttonProduce6,
+//                buttonProduce7, buttonProduce8, buttonProduce9};
+
+        Integer[] iconArray = new Integer[]{R.id.icon_carrot, R.id.icon_banana, R.id.icon_apple,
+                R.id.icon_potato, R.id.icon_onion, R.id.icon_orange,
+                R.id.icon_melon, R.id.icon_ginger, R.id.icon_beet};
+
 
         // Initialize buttons
         buttonProduce1 = findViewById(R.id.button_placeholder_1);
@@ -130,6 +148,16 @@ public class ActivityGarden extends AppCompatActivity {
         produceIconGinger = editMenuLayout.findViewById(R.id.icon_ginger);
         produceIconBeet = editMenuLayout.findViewById(R.id.icon_beet);
 
+        produceIconCarrot.setTag(R.id.icon_carrot);
+        produceIconBanana.setTag(R.id.icon_banana);
+        produceIconApple.setTag(R.id.icon_apple);
+        produceIconPotato.setTag(R.id.icon_potato);
+        produceIconOnion.setTag(R.id.icon_onion);
+        produceIconOrange.setTag(R.id.icon_orange);
+        produceIconMelon.setTag(R.id.icon_melon);
+        produceIconGinger.setTag(R.id.icon_ginger);
+        produceIconBeet.setTag(R.id.icon_beet);
+
         produceNumCarrot = editMenuLayout.findViewById(R.id.number_carrot);
         produceNumBanana = editMenuLayout.findViewById(R.id.number_banana);
         produceNumApple = editMenuLayout.findViewById(R.id.number_apple);
@@ -139,6 +167,9 @@ public class ActivityGarden extends AppCompatActivity {
         produceNumMelon = editMenuLayout.findViewById(R.id.number_melon);
         produceNumGinger = editMenuLayout.findViewById(R.id.number_ginger);
         produceNumBeet = editMenuLayout.findViewById(R.id.number_beet);
+
+
+
 
 
         // set numbers next to produce icon indicating how many users have collected
@@ -167,6 +198,8 @@ public class ActivityGarden extends AppCompatActivity {
             }
         };
 
+
+
         // Set the touch listener to all your produce ImageButtons
         produceIconCarrot.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(CARROT, 0) >= 5 ? touchListener : null);
         produceIconBanana.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(BANANA, 0) >= 5 ? touchListener : null);
@@ -177,7 +210,6 @@ public class ActivityGarden extends AppCompatActivity {
         produceIconMelon.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(MELON, 0) >= 5 ? touchListener : null);
         produceIconGinger.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(GINGER, 0) >= 5 ? touchListener : null);
         produceIconBeet.setOnTouchListener(PersistentInfo.gameData.inventory.getOrDefault(BEET, 0) >= 5 ? touchListener : null);
-
 
         for (int id : new int[]{R.id.icon_carrot, R.id.icon_banana, R.id.icon_apple, R.id.icon_potato,
                 R.id.icon_onion, R.id.icon_orange, R.id.icon_melon, R.id.icon_ginger, R.id.icon_beet}) {
@@ -220,9 +252,11 @@ public class ActivityGarden extends AppCompatActivity {
                             droppedOn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    Integer produceIconId = (Integer) draggedView.getTag();
+
                                     // Now, since the placeholder was empty and we just dropped an item, we can play the sound associated with the item
                                     // Assuming the ID of the draggedView correlates to a specific sound
-                                    toggleSound(getSoundResourceIdForIcon(draggedView.getId()), droppedOn.getId());
+                                    toggleSound(getSoundResourceIdForIcon(draggedView.getId()), droppedOn.getId(), produceIconId);
                                 }
                             });
 
@@ -369,6 +403,8 @@ public class ActivityGarden extends AppCompatActivity {
     }
 
 
+
+
     private void reduceProduceNum(int produceId) {
         if (produceId == R.id.icon_carrot) {
             int previousAmount = PersistentInfo.gameData.inventory.getOrDefault(CARROT, 0);
@@ -464,19 +500,95 @@ public class ActivityGarden extends AppCompatActivity {
         }
     }
 
-    private void toggleSound(int soundResourceId, int buttonId) {
+    private void toggleSound(int soundResourceId, int buttonId, int produceIconId) {
+
+
         // Check if the button already has a MediaPlayer associated with it
         if (mediaPlayers.containsKey(buttonId)) {
             MediaPlayer player = mediaPlayers.get(buttonId);
             if (player.isPlaying()) {
                 player.pause(); // Pause playback
             } else {
+                // Resume playback, but synchronize with global start time
+                if (globalStartTime != -1) {
+                    long soundPosition;
+                    if (produceIconId == R.id.icon_orange) {
+                        soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 400);
+                    }
+                    else {
+                        soundPosition = (System.currentTimeMillis() - globalStartTime) % player.getDuration();
+                    }
+                    System.out.println("Seeking to: " + soundPosition);
+
+                    player.setOnSeekCompleteListener(mp -> {
+                        mp.start();
+                        mp.setOnSeekCompleteListener(null); // Reset listener
+                    });
+
+                    player.seekTo((int) soundPosition);
+                    System.out.println("Current position after seek: " + player.getCurrentPosition());
+                }
                 player.start(); // Resume playback
             }
         } else {
             // No MediaPlayer for this button yet, create and start it
             MediaPlayer player = MediaPlayer.create(this, soundResourceId);
             player.setLooping(true);
+
+            // If this is the first sound being played, set the global start time
+            if (globalStartTime == -1) {
+                globalStartTime = System.currentTimeMillis();
+                System.out.println("globalStartTime: " + globalStartTime);
+            } else {
+                // Synchronize the start of this new sound with the others
+                long soundPosition;
+                if (produceIconId == R.id.icon_melon) {
+                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 4);
+                }
+                else if (produceIconId == R.id.icon_orange) {
+                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + -60);
+                }
+                else if (produceIconId == R.id.icon_beet) {
+                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() - 13);
+                }
+                else if (produceIconId == R.id.icon_banana) {
+                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 125);
+                }
+                else if (produceIconId == R.id.icon_apple) {
+                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 48);
+                }
+                else if (produceIconId == R.id.icon_potato) {
+                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 100);
+                }
+                else if (produceIconId == R.id.icon_carrot) {
+                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() - 8);
+                }
+                else if (produceIconId == R.id.icon_ginger) {
+                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() - 15);
+                }
+                else if (produceIconId == R.id.icon_onion) {
+                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration());
+                }
+                else {
+                    soundPosition = (System.currentTimeMillis() - globalStartTime) % player.getDuration();
+                }
+//                long soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 560);
+                System.out.println("Seeking to: " + soundPosition);
+                // player should be in start/pause state before calling seekTo
+//                player.start();
+//                player.pause();
+                player.setOnSeekCompleteListener(mp -> {
+                    mp.start();
+                    mp.setOnSeekCompleteListener(null); // Reset listener
+                });
+                if (soundResourceId == R.id.icon_orange) {
+                    soundPosition += 500;
+                }
+                player.seekTo((int) soundPosition);
+                System.out.println("Current position after seek: " + player.getCurrentPosition());
+            }
+
+
             player.start();
             mediaPlayers.put(buttonId, player); // Store it in the map
         }
@@ -484,6 +596,8 @@ public class ActivityGarden extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+
+
         super.onDestroy();
         // Release all MediaPlayer resources
         for (MediaPlayer player : mediaPlayers.values()) {
