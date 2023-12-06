@@ -12,6 +12,8 @@ import static com.cs407.beet_boxing.util.EnumProduceType.POTATO;
 
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
@@ -88,14 +90,11 @@ public class ActivityGarden extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_garden);
 
-
         setupUI();
         setupListeners();
 
-
         // set numbers next to produce icon indicating how many users have collected
         setProduceAmount();
-
 
         for (int id : new int[]{R.id.icon_carrot, R.id.icon_banana, R.id.icon_apple, R.id.icon_potato,
                 R.id.icon_onion, R.id.icon_orange, R.id.icon_melon, R.id.icon_ginger, R.id.icon_beet}) {
@@ -121,15 +120,9 @@ public class ActivityGarden extends AppCompatActivity {
             produceNums[i] = editMenuLayout.findViewById(PRODUCE_NUM_IDS[i]);
         }
 
-
-
-
         // Initialize mediaPlayers HashMap
         mediaPlayers = new HashMap<>();
     }
-
-
-
 
     private void setupListeners() {
         Button newGameButton = findViewById(R.id.newGameButton);
@@ -137,26 +130,17 @@ public class ActivityGarden extends AppCompatActivity {
         ImageView settings = findViewById(R.id.settings);
         settings.setOnClickListener(e -> startActivity(new Intent(this, SettingsActivity.class)));
 
-
-
-
         // Set click listener to show the edit menu
         Button editButton = findViewById(R.id.edit);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isEditOpen) {
-                    editMenuLayout.setVisibility(View.VISIBLE); // Show the edit menu
-                    isEditOpen = true;
-                } else {
-                    editMenuLayout.setVisibility(View.GONE); // Hide the edit menu
-                    isEditOpen = false;
-                }
+        editButton.setOnClickListener(v -> {
+            if (!isEditOpen) {
+                editMenuLayout.setVisibility(View.VISIBLE); // Show the edit menu
+                isEditOpen = true;
+            } else {
+                editMenuLayout.setVisibility(View.GONE); // Hide the edit menu
+                isEditOpen = false;
             }
         });
-
-
-
 
         // Create the OnTouchListener
         View.OnTouchListener touchListener = new View.OnTouchListener() {
@@ -180,13 +164,10 @@ public class ActivityGarden extends AppCompatActivity {
             }
         };
 
-
-
         for (int i = 0; i < produceIcons.length; i++) {
             produceIcons[i].setOnTouchListener(PersistentInfo.gameData.inventory.
                     getOrDefault(PRODUCE_ENUMS[i], 0) >= 5 ? touchListener : null);
         }
-
 
         View.OnDragListener dragListener = new View.OnDragListener() {
             @Override
@@ -247,18 +228,10 @@ public class ActivityGarden extends AppCompatActivity {
             }
         };
 
-
         for (ImageButton buttonProduce : buttonProduces) {
             buttonProduce.setOnDragListener(dragListener);
         }
-
-
     }
-
-
-
-
-
 
     @Override
     protected void onPause() {
@@ -270,10 +243,6 @@ public class ActivityGarden extends AppCompatActivity {
             }
         }
     }
-
-
-
-
 
     private TextView findCountdownTextViewForButton(int iconId) {
 
@@ -287,8 +256,6 @@ public class ActivityGarden extends AppCompatActivity {
         return findViewById(COUNTDOWN_IDS[index]);
     }
 
-
-
     private void startCountdownTimer(TextView countdownView, long timeInFuture) {
         new CountDownTimer(timeInFuture, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -301,7 +268,6 @@ public class ActivityGarden extends AppCompatActivity {
         }.start();
     }
 
-
     private void startCooldown(final ImageButton draggedView, final ImageButton droppedOn, long cooldownTime) {
         // Mark the view as on cooldown
         cooldownMap.put(draggedView.getId(), true);
@@ -313,7 +279,7 @@ public class ActivityGarden extends AppCompatActivity {
                 droppedOn.setImageDrawable(null); // Remove the drawable from the droppedOn ImageButton
                 droppedOn.setTag(true); // Reset the tag to indicate it's empty
                 droppedOn.setOnClickListener(null);
-
+                toggleButtonColor(droppedOn.getId(), false);
 
                 // Release the MediaPlayer associated with the droppedOn ImageButton if it exists
                 MediaPlayer player = mediaPlayers.remove(droppedOn.getId());
@@ -326,9 +292,6 @@ public class ActivityGarden extends AppCompatActivity {
             });
         }, cooldownTime);
     }
-
-
-
 
     private void reduceProduceNum(int produceId) {
         int index = 0;
@@ -343,7 +306,6 @@ public class ActivityGarden extends AppCompatActivity {
         if (PersistentInfo.gameData.inventory.getOrDefault(PRODUCE_ENUMS[index], 0) < 5) {
             produceIcons[index].setOnTouchListener(null);
         }
-
     }
 
     private void setProduceAmount() {
@@ -353,7 +315,7 @@ public class ActivityGarden extends AppCompatActivity {
 
     }
 
-//Sage edited these to use the new mp3 file assets
+    //Sage edited these to use the new mp3 file assets
     private int getSoundResourceIdForIcon(int iconId) {
 
         int index = 0;
@@ -367,13 +329,12 @@ public class ActivityGarden extends AppCompatActivity {
     }
 
     private void toggleSound(int soundResourceId, int buttonId, int produceIconId) {
-
-
         // Check if the button already has a MediaPlayer associated with it
         if (mediaPlayers.containsKey(buttonId)) {
             MediaPlayer player = mediaPlayers.get(buttonId);
             if (player.isPlaying()) {
                 player.pause(); // Pause playback
+                toggleButtonColor(buttonId, false);
             } else {
                 // Resume playback, but synchronize with global start time
                 if (globalStartTime != -1) {
@@ -395,6 +356,7 @@ public class ActivityGarden extends AppCompatActivity {
                     System.out.println("Current position after seek: " + player.getCurrentPosition());
                 }
                 player.start(); // Resume playback
+                toggleButtonColor(buttonId, true);
             }
         } else {
             // No MediaPlayer for this button yet, create and start it
@@ -457,13 +419,19 @@ public class ActivityGarden extends AppCompatActivity {
 
             player.start();
             mediaPlayers.put(buttonId, player); // Store it in the map
+            toggleButtonColor(buttonId, true);
         }
+    }
+
+    private void toggleButtonColor(int buttonId, boolean state) {
+        ImageButton button = findViewById(buttonId);
+
+        int tintColor = getResources().getColor(state ? R.color.green : R.color.gray, null); // Replace with your color resource
+        button.getBackground().setTint(tintColor);
     }
 
     @Override
     protected void onDestroy() {
-
-
         super.onDestroy();
         // Release all MediaPlayer resources
         for (MediaPlayer player : mediaPlayers.values()) {
