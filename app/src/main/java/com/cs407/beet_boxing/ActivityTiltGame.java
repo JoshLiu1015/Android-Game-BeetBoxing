@@ -118,7 +118,8 @@ public class ActivityTiltGame extends AppCompatActivity {
         float initialX = (float) (Math.random() * screenWidth);
         fallingObject.setX(initialX);
 
-        long initialDuration = (long) (2000 + Math.random() * 2000);
+        long initialDuration = (long) (2000 + Math.random() * 2000 + Math.random() * 1000);
+        //Sage added another random variable here to space out things
 
         long elapsedTime = System.currentTimeMillis() - startTime;
 
@@ -135,7 +136,28 @@ public class ActivityTiltGame extends AppCompatActivity {
         animation.setDuration(newDuration);
 
         // Use a Handler to start the animation after a random initial delay
-        long initialDelay = (long) (3000 + Math.random() * 1000);
+        long initialDelay = (long) (2000 + Math.random() * 2000);
+        //Sage added another random variable here to space out things below
+        //add different random delay modifiers to different objects to space out further
+        if(fallingObject.equals(findViewById(R.id.fallingCarrot))){
+            initialDelay += 1000 * Math.random();
+        }else if (fallingObject.equals(findViewById(R.id.fallingBeet))){
+            initialDelay += 1500 * Math.random();
+        } else if(fallingObject.equals(findViewById(R.id.fallingApple))){
+            initialDelay += 2000 * Math.random();
+        }else if (fallingObject.equals(findViewById(R.id.fallingMelon))){
+            initialDelay += 2500 * Math.random();
+        } else if(fallingObject.equals(findViewById(R.id.fallingOrange))){
+            initialDelay += 3000 * Math.random();
+        }else if (fallingObject.equals(findViewById(R.id.fallingPotato))){
+            initialDelay += 3500 * Math.random();
+        } else if(fallingObject.equals(findViewById(R.id.fallingBanana))){
+            initialDelay += 4000 * Math.random();
+        }else if (fallingObject.equals(findViewById(R.id.fallingGinger))){
+            initialDelay += 4500 * Math.random();
+        }
+
+
         new Handler().postDelayed(animation::start, initialDelay);
 
         // Initially set the view to be invisible
@@ -161,7 +183,27 @@ public class ActivityTiltGame extends AppCompatActivity {
                 animation.setDuration(randomDuration);
 
                 // Get a random delay before the next fall starts
-                long randomDelay = (long) (Math.random() * 1000);
+                long randomDelay = (long) (2000 + Math.random() * 2000 + Math.random() * 2000);
+                //Sage edited this to space things out
+                //add different random delay modifiers to different objects to space out further
+                if(fallingObject.equals(findViewById(R.id.fallingCarrot))){
+                    randomDelay += 1000 * Math.random();
+                }else if (fallingObject.equals(findViewById(R.id.fallingBeet))){
+                    randomDelay += 1500 * Math.random();
+                } else if(fallingObject.equals(findViewById(R.id.fallingApple))){
+                    randomDelay += 2000 * Math.random();
+                }else if (fallingObject.equals(findViewById(R.id.fallingMelon))){
+                    randomDelay += 2500 * Math.random();
+                } else if(fallingObject.equals(findViewById(R.id.fallingOrange))){
+                    randomDelay += 3000 * Math.random();
+                }else if (fallingObject.equals(findViewById(R.id.fallingPotato))){
+                    randomDelay += 3500 * Math.random();
+                } else if(fallingObject.equals(findViewById(R.id.fallingBanana))){
+                    randomDelay += 4000 * Math.random();
+                }else if (fallingObject.equals(findViewById(R.id.fallingGinger))){
+                    randomDelay += 4500 * Math.random();
+                }
+
                 // Use a Handler to start the animation after the random delay
                 new Handler().postDelayed(animation::start, randomDelay);
 
