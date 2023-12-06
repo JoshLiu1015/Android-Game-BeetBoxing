@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Beet_boxing"
         tools:targetApi="31">
         <activity
+            android:name=".HelpActivity"
+            android:exported="false" />
+        <activity
             android:name=".share_recording"
             android:exported="false" />
         <activity

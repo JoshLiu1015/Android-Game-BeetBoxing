@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HelpActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/helpTitle"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:foregroundGravity="center"
+            android:text="Intro to Beet Boxing"
+            android:textAlignment="center"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:id="@+id/helpScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="641dp"
+            android:background="#FFFFFF"
+            android:backgroundTint="#D9FFD8">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tutorialText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Welcome to Beet Boxing, an app about composing with fun produce! In this app, there is an available minigame to play with the objective of collecting as many produce as possible, while dodging any rocks that may appear."
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/helpRock"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/rock"
+                        android:contentDescription="Picture of a rock" />
+
+                    <ImageView
+                        android:id="@+id/helpProduce"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/beetsmall"
+                        android:contentDescription="Picture of a beet" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tutorialText1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="These collected produce are saved in your inventory, where you can spend them to compose cool combinations of musical loops and record them for your friends."
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/inventoryImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/garden"
+                    android:contentDescription="Image of the garden inventory" />
+
+                <TextView
+                    android:id="@+id/tutorialText2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Collecting five of any produce type will allow you to plant that produce in a slot in your garden, where it will last for an amount of time displayed in the edit mode. When that timer runs out, it will expire."
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/inventoryImage2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/garden2"
+                    android:contentDescription="Image of a produce in the garden" />
+
+                <ImageView
+                    android:id="@+id/timerImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/timer"
+                    android:contentDescription="Image of timer running out" />
+
+                <TextView
+                    android:id="@+id/tutorialText3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Before that timer runs out, you can play around with the different audio tracks associated with each produce to make some cool music. You can also navigate to the recording screen in order to save these sound bytes for later!"
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/returnButton"
+            android:layout_width="105dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#4CAF50"
+            android:foregroundGravity="center"
+            android:text="Return"
+            android:textColorHighlight="#A577F6"
+            android:textColorLink="#673AB7" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
