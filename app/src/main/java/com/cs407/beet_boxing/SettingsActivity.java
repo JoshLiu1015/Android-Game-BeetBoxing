@@ -34,7 +34,20 @@ public class SettingsActivity extends AppCompatActivity {
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         int curVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        backButton.setOnClickListener(view -> backToMain());
+
+        // get the boolean value passed from ActivityGarden
+        Intent intent = getIntent();
+        boolean isFromGarden = intent.getBooleanExtra("fromGarden", false);
+
+        // if the setting button was clicked from ActivityGarden
+        // go back to ActivityGarden, otherwise, go back to MainActivity
+        if (isFromGarden) {
+            backButton.setOnClickListener(view -> backToGarden());
+        }
+        else {
+            backButton.setOnClickListener(view -> backToMain());
+        }
+
         seekBarVolume.setProgress(curVolume);
         seekBarVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -64,6 +77,11 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void backToMain(){
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void backToGarden() {
+        Intent intent = new Intent(this, ActivityGarden.class);
         startActivity(intent);
     }
 }

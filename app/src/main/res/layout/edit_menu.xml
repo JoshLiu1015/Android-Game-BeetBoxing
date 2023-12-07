@@ -56,7 +56,7 @@
                 android:layout_gravity="center|end"
                 android:padding="4dp"
                 android:text=""
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="7dp"
                 android:textSize="20sp" />
         </FrameLayout>
 
@@ -94,7 +94,7 @@
                 android:layout_gravity="center|end"
                 android:padding="4dp"
                 android:text=""
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="7dp"
                 android:textSize="20sp" />
         </FrameLayout>
 
@@ -132,7 +132,7 @@
                 android:layout_gravity="center|end"
                 android:padding="4dp"
                 android:text=""
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="7dp"
                 android:textSize="20sp" />
         </FrameLayout>
 
@@ -171,7 +171,7 @@
                 android:layout_gravity="center|end"
                 android:padding="4dp"
                 android:text=""
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="7dp"
                 android:textSize="20sp" />
         </FrameLayout>
 
@@ -209,7 +209,7 @@
                 android:layout_gravity="center|end"
                 android:padding="4dp"
                 android:text=""
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="7dp"
                 android:textSize="20sp" />
         </FrameLayout>
 
@@ -249,7 +249,7 @@
                 android:layout_gravity="center|end"
                 android:padding="4dp"
                 android:text=""
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="7dp"
                 android:textSize="20sp" />
         </FrameLayout>
 
@@ -288,7 +288,7 @@
                 android:layout_gravity="center|end"
                 android:padding="4dp"
                 android:text=""
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="7dp"
                 android:textSize="20sp" />
         </FrameLayout>
 
@@ -326,7 +326,7 @@
                 android:layout_gravity="center|end"
                 android:padding="4dp"
                 android:text=""
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="7dp"
                 android:textSize="20sp" />
         </FrameLayout>
 
@@ -364,7 +364,7 @@
                 android:layout_gravity="center|end"
                 android:padding="4dp"
                 android:text=""
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="7dp"
                 android:textSize="20sp" />
         </FrameLayout>
 
