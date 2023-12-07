@@ -42,6 +42,7 @@ public class ActivityGarden extends AppCompatActivity {
     private Button closeEditMenuButton;
     private boolean isEditOpen = false;
     private HashMap<Integer, Boolean> cooldownMap = new HashMap<>();
+    private HashMap<Integer, Integer> recordMap = new HashMap<>();
     private long globalStartTime = -1;
 
     private static final int[] BUTTON_PRODUCE_IDS = {
@@ -128,9 +129,19 @@ public class ActivityGarden extends AppCompatActivity {
     private void setupListeners() {
         Button newGameButton = findViewById(R.id.newGameButton);
         newGameButton.setOnClickListener(e -> startActivity(new Intent(this, ActivityTiltGame.class)));
+
+        Button recordButton = findViewById(R.id.recordButton);
+        recordButton.setOnClickListener(e -> {
+            Intent intent = new Intent(this, share_recording.class);
+            intent.putExtra("recordMap", recordMap);
+            startActivity(intent);
+        });
+
+
         ImageView settings = findViewById(R.id.settings);
         settings.setOnClickListener(e -> {
             Intent intent = new Intent(this, SettingsActivity.class);
+            // pass a boolean to SettingsActivity indicating it's clicked in ActivityGarden
             intent.putExtra("fromGarden", true);
             startActivity(intent);
         });
@@ -277,9 +288,18 @@ public class ActivityGarden extends AppCompatActivity {
         // Mark the view as on cooldown
         cooldownMap.put(draggedView.getId(), true);
 
+        // when produce is placed on a place holder, put its produce ID and placeholder ID in the recordMap
+        recordMap.put(draggedView.getId(), droppedOn.getId());
+        System.out.println(recordMap);
+
         // Start a delay to remove the view after the cooldown
         new Handler().postDelayed(() -> {
             cooldownMap.put(draggedView.getId(), false); // Cooldown finished
+
+            // when produce is removed from a place holder, remove it from the recordMap
+            recordMap.remove(draggedView.getId());
+            System.out.println(recordMap);
+
             runOnUiThread(() -> {
                 droppedOn.setImageDrawable(null); // Remove the drawable from the droppedOn ImageButton
                 droppedOn.setTag(true); // Reset the tag to indicate it's empty
