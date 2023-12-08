@@ -10,6 +10,9 @@ import static com.cs407.beet_boxing.util.EnumProduceType.ONION;
 import static com.cs407.beet_boxing.util.EnumProduceType.ORANGE;
 import static com.cs407.beet_boxing.util.EnumProduceType.POTATO;
 
+import static java.security.AccessController.getContext;
+
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -30,6 +33,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
 
 import com.cs407.beet_boxing.persistence.PersistentInfo;
 
@@ -75,6 +80,17 @@ public class ActivityGarden extends AppCompatActivity {
             R.raw.xylo_trimmed, R.raw.synth_trimmed, R.raw.drumset1_trimmed
     };
 
+    private static final int[] ON_IMAGE_SRCS = {
+            R.drawable.carroton, R.drawable.bananaon, R.drawable.appleon,
+            R.drawable.potatoon, R.drawable.onionon, R.drawable.orangeon,
+            R.drawable.melonon, R.drawable.gingeron, R.drawable.beeton
+    };
+
+    private static final int[] OFF_IMAGE_SRCS = {
+            R.drawable.carrot, R.drawable.banana, R.drawable.apple,
+            R.drawable.potato, R.drawable.onion, R.drawable.orange,
+            R.drawable.melon, R.drawable.ginger, R.drawable.beet
+    };
 
     private static final int[] COUNTDOWN_IDS = {
             R.id.countdown_carrot, R.id.countdown_banana, R.id.countdown_apple,
@@ -360,6 +376,13 @@ public class ActivityGarden extends AppCompatActivity {
             if (player.isPlaying()) {
                 player.pause(); // Pause playback
                 toggleButtonColor(buttonId, false);
+                toggleButtonImage(buttonId, produceIconId, false);
+
+                //Sage added following code to change image id
+                //feel free to make more readable using arrays or enums
+
+
+
             } else {
                 // Resume playback, but synchronize with global start time
                 if (globalStartTime != -1) {
@@ -383,6 +406,7 @@ public class ActivityGarden extends AppCompatActivity {
                 }
                 player.start(); // Resume playback
                 toggleButtonColor(buttonId, true);
+                toggleButtonImage(buttonId, produceIconId, true);
             }
         } else {
             // No MediaPlayer for this button yet, create and start it
@@ -447,6 +471,7 @@ public class ActivityGarden extends AppCompatActivity {
             player.start();
             mediaPlayers.put(buttonId, player); // Store it in the map
             toggleButtonColor(buttonId, true);
+            toggleButtonImage(buttonId, produceIconId, true);
         }
     }
 
@@ -455,6 +480,29 @@ public class ActivityGarden extends AppCompatActivity {
 
         int tintColor = getResources().getColor(state ? R.color.green : R.color.gray, null); // Replace with your color resource
         button.getBackground().setTint(tintColor);
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void toggleButtonImage(int buttonId, int iconId, boolean state) {
+        //first get index to refer to correct image vales
+        int index = 0;
+        for (int i = 0; i < produceIcons.length; i++) {
+            if (produceIcons[i].getId() == iconId) {
+                index = i;
+            }
+        }
+        ImageButton button = findViewById(buttonId);
+
+        Drawable imageSrc = button.getDrawable();
+
+        if (state){
+            imageSrc = getResources().getDrawable(ON_IMAGE_SRCS[index]);
+        }
+        else{
+            imageSrc = getResources().getDrawable(OFF_IMAGE_SRCS[index]);
+        }
+
+        button.setImageDrawable(imageSrc);
     }
 
     @Override
