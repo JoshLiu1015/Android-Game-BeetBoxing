@@ -1,8 +1,10 @@
 package com.cs407.beet_boxing;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
@@ -17,10 +19,12 @@ import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -72,6 +76,7 @@ public class RecordingMode extends AppCompatActivity {
     private Thread capturingThread;
 
     private File audioFile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,8 +200,14 @@ public class RecordingMode extends AppCompatActivity {
     }
 
     private void startCapturing() {
+        Log.d("RecordingMode", "startCapturing() called");
+
+        if (audioRecord != null) {
+            Log.d("RecordingMode", "Existing audioRecord instance found. Releasing...");
+            audioRecord.release();
+            audioRecord = null;
+        }
         Log.d("AudioCapture", "startCapturing() - Setting up AudioRecord");
-        int myUid = getApplicationContext().getApplicationInfo().uid;
         recordButton.setText("Recording...");
         recordButton.setEnabled(false); // Disable the button while recording
         AudioPlaybackCaptureConfiguration config = new AudioPlaybackCaptureConfiguration.Builder(mediaProjection)
@@ -207,6 +218,7 @@ public class RecordingMode extends AppCompatActivity {
         int channelConfig = AudioFormat.CHANNEL_IN_STEREO;
         int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
         int minBufSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat);
+
 
         audioRecord = new AudioRecord.Builder()
                 .setAudioFormat(new AudioFormat.Builder()
@@ -241,6 +253,7 @@ public class RecordingMode extends AppCompatActivity {
             }
         });
         capturingThread.start();
+        Log.d("RecordingMode", "New AudioRecord instance started");
     }
 
 
@@ -301,10 +314,21 @@ public class RecordingMode extends AppCompatActivity {
         stopService(new Intent(this, AudioCaptureService.class));
         isCapturing = false;
         isRecording = false;
+        Log.d("RecordingMode", "stopAudioCapture() called");
+        if (mediaProjection != null) {
+            Log.d("RecordingMode", "Stopping MediaProjection");
+            mediaProjection.stop();
+            mediaProjection = null;  // Release the MediaProjection reference
+        }
         if (audioRecord != null) {
-            audioRecord.stop();
+            if (audioRecord.getState() == AudioRecord.STATE_INITIALIZED) {
+                Log.d("RecordingMode", "Stopping audioRecord");
+                audioRecord.stop();
+            }
+            Log.d("RecordingMode", "Releasing audioRecord");
             audioRecord.release();
             audioRecord = null;
+            showSaveFileDialog();
             timerProgressBar.setVisibility(View.GONE);
             if (countDownTimer != null) {
                 countDownTimer.cancel();
@@ -314,6 +338,16 @@ public class RecordingMode extends AppCompatActivity {
             try {
                 convertPcmToWav(audioFile, wavFile, 44100, 2, 16);
                 Log.d("AudioCapture", "WAV file saved to: " + wavFile.getAbsolutePath());
+
+                // Check if PCM file exists and delete it
+                if (audioFile.exists()) {
+                    boolean deleted = audioFile.delete();
+                    if (deleted) {
+                        Log.d("AudioCapture", "PCM file deleted successfully.");
+                    } else {
+                        Log.e("AudioCapture", "Failed to delete PCM file.");
+                    }
+                }
             } catch (IOException e) {
                 Log.e("AudioCapture", "Error converting PCM to WAV", e);
             }
@@ -430,6 +464,67 @@ public class RecordingMode extends AppCompatActivity {
         in.close();
         out.close();
     }
+
+    private void showSaveFileDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Save Recording File");
+
+        final EditText input = new EditText(this);
+
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setHint("Enter file name");
+        input.setBackground(ContextCompat.getDrawable(this, R.drawable.input_background)); // Create a drawable for the background
+        input.setPadding(32, 32, 32, 32); // Adjust padding values as needed
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String filename = input.getText().toString();
+                saveRecording(filename);
+            }
+        });
+        builder.setNegativeButton("Re-record", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                resetRecordingSetup();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void saveRecording(String filename) {
+        if (filename.isEmpty()) {
+            Toast.makeText(this, "Filename cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        File wavFile = new File(getFilesDir(), "captured_audio1.wav");
+        File newFile = new File(getFilesDir(), filename + ".wav");
+
+        if (wavFile.renameTo(newFile)) {
+            Toast.makeText(this, "File saved: " + newFile.getName(), Toast.LENGTH_SHORT).show();
+            // Start new activity here
+            Intent intent = new Intent(this, RecordingsListActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void resetRecordingSetup() {
+        // Reset the timer
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countdownTimerTextView.setText("" + 30);
+        }
+
+    }
+
+
 
 
 
