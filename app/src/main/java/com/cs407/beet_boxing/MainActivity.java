@@ -7,9 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cs407.beet_boxing.persistence.PersistentInfo;
@@ -47,12 +45,5 @@ public class MainActivity extends AppCompatActivity {
     public void openSetting(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        PersistentInfo.saveGameData(context);
-        PersistentInfo.saveConfig(context);
     }
 }

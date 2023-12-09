@@ -1,5 +1,6 @@
 package com.cs407.beet_boxing.persistence;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -20,8 +21,11 @@ public class PersistentInfo {
             .setPrettyPrinting()
             .create();
 
-    public static ConfigData config;
-    public static GameData gameData;
+    private static ConfigData config;
+    private static GameData gameData;
+
+    @SuppressLint("StaticFieldLeak")
+    private static Context context;
 
     /**
      * Tries to load data from config, else creates some defaults. Should be run on Application
@@ -30,12 +34,13 @@ public class PersistentInfo {
      * @return status code
      */
     public static int init(Context context) {
+        PersistentInfo.context = context;
         if (config != null) {
             return 3;
         }
 
         int result = 0;
-        SharedPreferences preferences = preferences(context);
+        SharedPreferences preferences = preferences(PersistentInfo.context);
         try {
             config = GSON.fromJson(preferences.getString("config", ""), ConfigData.class);
             if (config == null) {
@@ -61,12 +66,12 @@ public class PersistentInfo {
     }
 
     // startRegion save
-    public static void saveGameData(Context context) {
+    public static void saveGameData() {
         SharedPreferences preferences = preferences(context);
         preferences.edit().putString("gameData", GSON.toJson(gameData)).apply();
     }
 
-    public static void saveConfig(Context context) {
+    public static void saveConfig() {
         SharedPreferences preferences = preferences(context);
         preferences.edit().putString("config", GSON.toJson(config)).apply();
     }
@@ -78,5 +83,23 @@ public class PersistentInfo {
      */
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences("user", Context.MODE_PRIVATE);
+    }
+
+    public static void setConfig(ConfigData config) {
+        PersistentInfo.config = config;
+        saveConfig();
+    }
+
+    public static void setGameData(GameData gameData) {
+        PersistentInfo.gameData = gameData;
+        saveGameData();
+    }
+
+    public static ConfigData getConfig() {
+        return config;
+    }
+
+    public static GameData getGameData() {
+        return gameData;
     }
 }

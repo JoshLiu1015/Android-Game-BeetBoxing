@@ -11,6 +11,7 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cs407.beet_boxing.persistence.ConfigData;
 import com.cs407.beet_boxing.persistence.PersistentInfo;
 import com.cs407.beet_boxing.util.EnumControlScheme;
 
@@ -24,6 +25,8 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ConfigData config = PersistentInfo.getConfig();
+        assert config != null;
         setContentView(R.layout.settings_activity);
         backButton = findViewById(R.id.backButton);
         replayButton = findViewById(R.id.replayButton);
@@ -40,7 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0 );
-                PersistentInfo.config.volume = progress;
+                config.setVolume(progress);
             }
 
             @Override
@@ -55,14 +58,14 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         Switch controlSchemeSwitch = findViewById(R.id.switch3);
-        controlSchemeSwitch.setChecked(PersistentInfo.config.controlScheme == EnumControlScheme.DRAG);
+        controlSchemeSwitch.setChecked(config.getControlScheme() == EnumControlScheme.DRAG);
         controlSchemeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            PersistentInfo.config.controlScheme = isChecked ? EnumControlScheme.DRAG : EnumControlScheme.TILT;
+            config.setControlScheme(isChecked ? EnumControlScheme.DRAG : EnumControlScheme.TILT);
             Log.i("INFO", "control scheme: " + (isChecked ? "Drag" : "Tilt"));
         });
     }
 
-    public void backToMain(){
+    public void backToMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

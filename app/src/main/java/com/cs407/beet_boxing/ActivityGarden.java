@@ -13,9 +13,7 @@ import static com.cs407.beet_boxing.util.EnumProduceType.POTATO;
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.media.AudioAttributes;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -29,10 +27,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cs407.beet_boxing.persistence.GameData;
 import com.cs407.beet_boxing.persistence.PersistentInfo;
 
 import java.util.HashMap;
 
+/** @noinspection DataFlowIssue*/
 public class ActivityGarden extends AppCompatActivity {
 
     private HashMap<Integer, MediaPlayer> mediaPlayers;
@@ -88,14 +88,11 @@ public class ActivityGarden extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_garden);
 
-
         setupUI();
         setupListeners();
 
-
         // set numbers next to produce icon indicating how many users have collected
         setProduceAmount();
-
 
         for (int id : new int[]{R.id.icon_carrot, R.id.icon_banana, R.id.icon_apple, R.id.icon_potato,
                 R.id.icon_onion, R.id.icon_orange, R.id.icon_melon, R.id.icon_ginger, R.id.icon_beet}) {
@@ -105,7 +102,6 @@ public class ActivityGarden extends AppCompatActivity {
 
     private void setupUI() {
         editMenuLayout = findViewById(R.id.edit_menu_layout);
-
 
         // Initialize buttons and placeholders
         for (int i = 0; i < BUTTON_PRODUCE_IDS.length; i++) {
@@ -121,24 +117,15 @@ public class ActivityGarden extends AppCompatActivity {
             produceNums[i] = editMenuLayout.findViewById(PRODUCE_NUM_IDS[i]);
         }
 
-
-
-
         // Initialize mediaPlayers HashMap
         mediaPlayers = new HashMap<>();
     }
-
-
-
 
     private void setupListeners() {
         Button newGameButton = findViewById(R.id.newGameButton);
         newGameButton.setOnClickListener(e -> startActivity(new Intent(this, ActivityTiltGame.class)));
         ImageView settings = findViewById(R.id.settings);
         settings.setOnClickListener(e -> startActivity(new Intent(this, SettingsActivity.class)));
-
-
-
 
         // Set click listener to show the edit menu
         Button editButton = findViewById(R.id.edit);
@@ -154,9 +141,6 @@ public class ActivityGarden extends AppCompatActivity {
                 }
             }
         });
-
-
-
 
         // Create the OnTouchListener
         View.OnTouchListener touchListener = new View.OnTouchListener() {
@@ -180,13 +164,12 @@ public class ActivityGarden extends AppCompatActivity {
             }
         };
 
-
-
         for (int i = 0; i < produceIcons.length; i++) {
-            produceIcons[i].setOnTouchListener(PersistentInfo.gameData.inventory.
+            GameData gameData = PersistentInfo.getGameData();
+            assert gameData != null;
+            produceIcons[i].setOnTouchListener(gameData.getInventory().
                     getOrDefault(PRODUCE_ENUMS[i], 0) >= 5 ? touchListener : null);
         }
-
 
         View.OnDragListener dragListener = new View.OnDragListener() {
             @Override
@@ -255,11 +238,6 @@ public class ActivityGarden extends AppCompatActivity {
 
     }
 
-
-
-
-
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -270,10 +248,6 @@ public class ActivityGarden extends AppCompatActivity {
             }
         }
     }
-
-
-
-
 
     private TextView findCountdownTextViewForButton(int iconId) {
 
@@ -287,8 +261,6 @@ public class ActivityGarden extends AppCompatActivity {
         return findViewById(COUNTDOWN_IDS[index]);
     }
 
-
-
     private void startCountdownTimer(TextView countdownView, long timeInFuture) {
         new CountDownTimer(timeInFuture, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -300,7 +272,6 @@ public class ActivityGarden extends AppCompatActivity {
             }
         }.start();
     }
-
 
     private void startCooldown(final ImageButton draggedView, final ImageButton droppedOn, long cooldownTime) {
         // Mark the view as on cooldown
@@ -327,9 +298,6 @@ public class ActivityGarden extends AppCompatActivity {
         }, cooldownTime);
     }
 
-
-
-
     private void reduceProduceNum(int produceId) {
         int index = 0;
         for (int i = 0; i < produceIcons.length; i++) {
@@ -337,10 +305,12 @@ public class ActivityGarden extends AppCompatActivity {
                 index = i;
             }
         }
+        GameData gameData = PersistentInfo.getGameData();
+        assert gameData != null;
 
-        int previousAmount = PersistentInfo.gameData.inventory.getOrDefault(PRODUCE_ENUMS[index], 0);
-        PersistentInfo.gameData.inventory.put(PRODUCE_ENUMS[index], previousAmount - 5);
-        if (PersistentInfo.gameData.inventory.getOrDefault(PRODUCE_ENUMS[index], 0) < 5) {
+        int previousAmount = gameData.getInventory().getOrDefault(PRODUCE_ENUMS[index], 0);
+        gameData.getInventory().put(PRODUCE_ENUMS[index], previousAmount - 5);
+        if (gameData.getInventory().getOrDefault(PRODUCE_ENUMS[index], 0) < 5) {
             produceIcons[index].setOnTouchListener(null);
         }
 
@@ -348,14 +318,14 @@ public class ActivityGarden extends AppCompatActivity {
 
     private void setProduceAmount() {
         for (int i = 0; i < produceNums.length; i++) {
-            produceNums[i].setText(PersistentInfo.gameData.inventory.getOrDefault(PRODUCE_ENUMS[i], 0).toString());
+            GameData gameData = PersistentInfo.getGameData();
+            assert gameData != null;
+            produceNums[i].setText(gameData.getInventory().getOrDefault(PRODUCE_ENUMS[i], 0).toString());
         }
-
     }
 
-//Sage edited these to use the new mp3 file assets
+    //Sage edited these to use the new mp3 file assets
     private int getSoundResourceIdForIcon(int iconId) {
-
         int index = 0;
         for (int i = 0; i < produceIcons.length; i++) {
             if (produceIcons[i].getId() == iconId) {
@@ -367,8 +337,6 @@ public class ActivityGarden extends AppCompatActivity {
     }
 
     private void toggleSound(int soundResourceId, int buttonId, int produceIconId) {
-
-
         // Check if the button already has a MediaPlayer associated with it
         if (mediaPlayers.containsKey(buttonId)) {
             MediaPlayer player = mediaPlayers.get(buttonId);
@@ -454,7 +422,6 @@ public class ActivityGarden extends AppCompatActivity {
                 System.out.println("Current position after seek: " + player.getCurrentPosition());
             }
 
-
             player.start();
             mediaPlayers.put(buttonId, player); // Store it in the map
         }
@@ -462,8 +429,6 @@ public class ActivityGarden extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-
-
         super.onDestroy();
         // Release all MediaPlayer resources
         for (MediaPlayer player : mediaPlayers.values()) {
