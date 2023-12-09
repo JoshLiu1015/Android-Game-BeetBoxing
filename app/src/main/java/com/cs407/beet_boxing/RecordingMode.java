@@ -144,18 +144,19 @@ public class RecordingMode extends AppCompatActivity {
 
         // Retrieve the recordMap
         Intent intent = getIntent();
-        HashMap<Integer, Integer> recordMap = new HashMap<>();
-        recordMap.put(2131362079, 2131361903);
-        recordMap.put(2131362077, 2131361904); // Note: keys should be unique
-        recordMap.put(2131362076, 2131361905);
-        recordMap.put(2131362086, 2131361906);
-        recordMap.put(2131362084, 2131361907);
-        recordMap.put(2131362085, 2131361908);
-        recordMap.put(2131362083, 2131361909);
-        recordMap.put(2131362081, 2131361910);
-        recordMap.put(2131362078, 2131361911);
         if (intent != null && intent.hasExtra("recordMap")) {
             recordMap = (HashMap<Integer, Integer>) intent.getSerializableExtra("recordMap");
+        } else{
+            recordMap = new HashMap<>();
+            recordMap.put(2131362079, 2131361903);
+            recordMap.put(2131362077, 2131361904); // Note: keys should be unique
+            recordMap.put(2131362076, 2131361905);
+            recordMap.put(2131362086, 2131361906);
+            recordMap.put(2131362084, 2131361907);
+            recordMap.put(2131362085, 2131361908);
+            recordMap.put(2131362083, 2131361909);
+            recordMap.put(2131362081, 2131361910);
+            recordMap.put(2131362078, 2131361911);
         }
 
         // Set up UI based on recordMap
@@ -283,41 +284,6 @@ public class RecordingMode extends AppCompatActivity {
 
     }
 
-    private void getNameAndSetImageAndSound(HashMap<Integer, Integer> recordMap) {
-        if (recordMap != null) {
-            for (Map.Entry<Integer, Integer> entry : recordMap.entrySet()) {
-                Integer produceId = entry.getKey();
-                Integer buttonId = entry.getValue();
-
-                int produceIndex = Arrays.asList(ICON_IDS).indexOf(produceId);
-                if (produceIndex != -1) {
-                    setImageForPlaceholder(buttonId, produceIndex); // Set image using the index in ON_IMAGE_SRCS
-                    setupSoundForButton(buttonId, produceIndex); // Set sound using the index in SOUND_RESOURCE_IDS
-                } else {
-                    Log.d("RecordingMode", "Produce with ID: " + produceId + " not found in ICON_IDS");
-                }
-            }
-        }
-    }
-
-    private void setImageForPlaceholder(int buttonId, int imageIndex) {
-        ImageButton button = findViewById(buttonId);
-        if (imageIndex >= 0 && imageIndex < ON_IMAGE_SRCS.length) {
-            button.setImageResource(ON_IMAGE_SRCS[imageIndex]);
-        } else {
-            Log.e("RecordingMode", "Image index out of bounds for buttonId: " + buttonId);
-        }
-    }
-
-    private void setupSoundForButton(int buttonId, int produceIndex) {
-        if (produceIndex >= 0 && produceIndex < SOUND_RESOURCE_IDS.length) {
-            int soundResourceId = SOUND_RESOURCE_IDS[produceIndex];
-            ImageButton button = findViewById(buttonId);
-            button.setOnClickListener(v -> toggleSound(soundResourceId, buttonId));
-        } else {
-            Log.e("RecordingMode", "Produce index out of bounds for sound setup for buttonId: " + buttonId);
-        }
-    }
 
 
 
