@@ -10,6 +10,7 @@ import static com.cs407.beet_boxing.util.EnumProduceType.ONION;
 import static com.cs407.beet_boxing.util.EnumProduceType.ORANGE;
 import static com.cs407.beet_boxing.util.EnumProduceType.POTATO;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -17,6 +18,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,6 +42,7 @@ public class ActivityGarden extends AppCompatActivity {
     private Button closeEditMenuButton;
     private boolean isEditOpen = false;
     private HashMap<Integer, Boolean> cooldownMap = new HashMap<>();
+    private HashMap<Integer, Integer> recordMap = new HashMap<>();
     private long globalStartTime = -1;
 
     private static final int[] BUTTON_PRODUCE_IDS = {
@@ -72,6 +75,17 @@ public class ActivityGarden extends AppCompatActivity {
             R.raw.xylo_trimmed, R.raw.synth_trimmed, R.raw.drumset1_trimmed
     };
 
+    private static final int[] ON_IMAGE_SRCS = {
+            R.drawable.carroton, R.drawable.bananaon, R.drawable.appleon,
+            R.drawable.potatoon, R.drawable.onionon, R.drawable.orangeon,
+            R.drawable.melonon, R.drawable.gingeron, R.drawable.beeton
+    };
+
+    private static final int[] OFF_IMAGE_SRCS = {
+            R.drawable.carrot, R.drawable.banana, R.drawable.apple,
+            R.drawable.potato, R.drawable.onion, R.drawable.orange,
+            R.drawable.melon, R.drawable.ginger, R.drawable.beet
+    };
 
     private static final int[] COUNTDOWN_IDS = {
             R.id.countdown_carrot, R.id.countdown_banana, R.id.countdown_apple,
@@ -93,15 +107,14 @@ public class ActivityGarden extends AppCompatActivity {
 
         // set numbers next to produce icon indicating how many users have collected
         setProduceAmount();
-
-        for (int id : new int[]{R.id.icon_carrot, R.id.icon_banana, R.id.icon_apple, R.id.icon_potato,
-                R.id.icon_onion, R.id.icon_orange, R.id.icon_melon, R.id.icon_ginger, R.id.icon_beet}) {
-            cooldownMap.put(id, false);
-        }
     }
 
     private void setupUI() {
         editMenuLayout = findViewById(R.id.edit_menu_layout);
+
+        for (int id : ICON_IDS) {
+            cooldownMap.put(id, false);
+        }
 
         // Initialize buttons and placeholders
         for (int i = 0; i < BUTTON_PRODUCE_IDS.length; i++) {
@@ -124,21 +137,33 @@ public class ActivityGarden extends AppCompatActivity {
     private void setupListeners() {
         Button newGameButton = findViewById(R.id.newGameButton);
         newGameButton.setOnClickListener(e -> startActivity(new Intent(this, ActivityTiltGame.class)));
+
+        Button recordButton = findViewById(R.id.recordButton);
+        recordButton.setOnClickListener(e -> {
+            Intent intent = new Intent(this, RecordingMode.class);
+            intent.putExtra("recordMap", recordMap);
+            Log.d("recordMap", String.valueOf(recordMap));
+            startActivity(intent);
+        });
+
+
         ImageView settings = findViewById(R.id.settings);
-        settings.setOnClickListener(e -> startActivity(new Intent(this, SettingsActivity.class)));
+        settings.setOnClickListener(e -> {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            // pass a boolean to SettingsActivity indicating it's clicked in ActivityGarden
+            intent.putExtra("fromGarden", true);
+            startActivity(intent);
+        });
 
         // Set click listener to show the edit menu
         Button editButton = findViewById(R.id.edit);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isEditOpen) {
-                    editMenuLayout.setVisibility(View.VISIBLE); // Show the edit menu
-                    isEditOpen = true;
-                } else {
-                    editMenuLayout.setVisibility(View.GONE); // Hide the edit menu
-                    isEditOpen = false;
-                }
+        editButton.setOnClickListener(v -> {
+            if (!isEditOpen) {
+                editMenuLayout.setVisibility(View.VISIBLE); // Show the edit menu
+                isEditOpen = true;
+            } else {
+                editMenuLayout.setVisibility(View.GONE); // Hide the edit menu
+                isEditOpen = false;
             }
         });
 
@@ -146,6 +171,7 @@ public class ActivityGarden extends AppCompatActivity {
         View.OnTouchListener touchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d("DragDrop", "OnTouch called for view: " + view.getId());
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     Boolean isOnCooldown = cooldownMap.getOrDefault(view.getId(), false);
                     if (isOnCooldown) {
@@ -174,6 +200,7 @@ public class ActivityGarden extends AppCompatActivity {
         View.OnDragListener dragListener = new View.OnDragListener() {
             @Override
             public boolean onDrag(View receivingLayoutView, DragEvent dragEvent) {
+                Log.d("DragDrop", "OnDrag called with action: " + dragEvent.getAction());
                 switch (dragEvent.getAction()) {
                     case DragEvent.ACTION_DRAG_STARTED:
                         break;
@@ -230,12 +257,9 @@ public class ActivityGarden extends AppCompatActivity {
             }
         };
 
-
         for (ImageButton buttonProduce : buttonProduces) {
             buttonProduce.setOnDragListener(dragListener);
         }
-
-
     }
 
     @Override
@@ -264,7 +288,7 @@ public class ActivityGarden extends AppCompatActivity {
     private void startCountdownTimer(TextView countdownView, long timeInFuture) {
         new CountDownTimer(timeInFuture, 1000) {
             public void onTick(long millisUntilFinished) {
-                countdownView.setText("" + millisUntilFinished / 1000);
+                countdownView.setText("" + millisUntilFinished / 1000 + "s");
             }
 
             public void onFinish() {
@@ -277,14 +301,23 @@ public class ActivityGarden extends AppCompatActivity {
         // Mark the view as on cooldown
         cooldownMap.put(draggedView.getId(), true);
 
+        // when produce is placed on a place holder, put its produce ID and placeholder ID in the recordMap
+        recordMap.put(draggedView.getId(), droppedOn.getId());
+        System.out.println(recordMap);
+
         // Start a delay to remove the view after the cooldown
         new Handler().postDelayed(() -> {
             cooldownMap.put(draggedView.getId(), false); // Cooldown finished
+
+            // when produce is removed from a place holder, remove it from the recordMap
+            recordMap.remove(draggedView.getId());
+            System.out.println(recordMap);
+
             runOnUiThread(() -> {
                 droppedOn.setImageDrawable(null); // Remove the drawable from the droppedOn ImageButton
                 droppedOn.setTag(true); // Reset the tag to indicate it's empty
                 droppedOn.setOnClickListener(null);
-
+                toggleButtonColor(droppedOn.getId(), false);
 
                 // Release the MediaPlayer associated with the droppedOn ImageButton if it exists
                 MediaPlayer player = mediaPlayers.remove(droppedOn.getId());
@@ -313,7 +346,6 @@ public class ActivityGarden extends AppCompatActivity {
         if (gameData.getInventory().getOrDefault(PRODUCE_ENUMS[index], 0) < 5) {
             produceIcons[index].setOnTouchListener(null);
         }
-
     }
 
     private void setProduceAmount() {
@@ -342,16 +374,25 @@ public class ActivityGarden extends AppCompatActivity {
             MediaPlayer player = mediaPlayers.get(buttonId);
             if (player.isPlaying()) {
                 player.pause(); // Pause playback
+                toggleButtonColor(buttonId, false);
+                toggleButtonImage(buttonId, produceIconId, false);
+
+                //Sage added following code to change image id
+                //feel free to make more readable using arrays or enums
+
+
+
             } else {
                 // Resume playback, but synchronize with global start time
                 if (globalStartTime != -1) {
-                    long soundPosition;
+/*                    long soundPosition;
                     if (produceIconId == R.id.icon_orange) {
                         soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 400);
                     }
                     else {
                         soundPosition = (System.currentTimeMillis() - globalStartTime) % player.getDuration();
-                    }
+                    }*/
+                    long soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration());
                     System.out.println("Seeking to: " + soundPosition);
 
                     player.setOnSeekCompleteListener(mp -> {
@@ -363,6 +404,8 @@ public class ActivityGarden extends AppCompatActivity {
                     System.out.println("Current position after seek: " + player.getCurrentPosition());
                 }
                 player.start(); // Resume playback
+                toggleButtonColor(buttonId, true);
+                toggleButtonImage(buttonId, produceIconId, true);
             }
         } else {
             // No MediaPlayer for this button yet, create and start it
@@ -375,7 +418,7 @@ public class ActivityGarden extends AppCompatActivity {
                 System.out.println("globalStartTime: " + globalStartTime);
             } else {
                 // Synchronize the start of this new sound with the others
-                long soundPosition;
+/*                long soundPosition;
                 if (produceIconId == R.id.icon_melon) {
                     soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 4);
                 }
@@ -406,7 +449,8 @@ public class ActivityGarden extends AppCompatActivity {
                 else {
                     soundPosition = (System.currentTimeMillis() - globalStartTime) % player.getDuration();
                 }
-//                long soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 560);
+                long soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 560);*/
+                long soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration());
                 System.out.println("Seeking to: " + soundPosition);
                 // player should be in start/pause state before calling seekTo
 //                player.start();
@@ -415,16 +459,48 @@ public class ActivityGarden extends AppCompatActivity {
                     mp.start();
                     mp.setOnSeekCompleteListener(null); // Reset listener
                 });
-                if (soundResourceId == R.id.icon_orange) {
-                    soundPosition += 500;
-                }
+//                if (soundResourceId == R.id.icon_orange) {
+//                    soundPosition += 500;
+//                }
                 player.seekTo((int) soundPosition);
                 System.out.println("Current position after seek: " + player.getCurrentPosition());
             }
 
             player.start();
             mediaPlayers.put(buttonId, player); // Store it in the map
+            toggleButtonColor(buttonId, true);
+            toggleButtonImage(buttonId, produceIconId, true);
         }
+    }
+
+    private void toggleButtonColor(int buttonId, boolean state) {
+        ImageButton button = findViewById(buttonId);
+
+        int tintColor = getResources().getColor(state ? R.color.green : R.color.gray, null); // Replace with your color resource
+        button.getBackground().setTint(tintColor);
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void toggleButtonImage(int buttonId, int iconId, boolean state) {
+        //first get index to refer to correct image vales
+        int index = 0;
+        for (int i = 0; i < produceIcons.length; i++) {
+            if (produceIcons[i].getId() == iconId) {
+                index = i;
+            }
+        }
+        ImageButton button = findViewById(buttonId);
+
+        Drawable imageSrc = button.getDrawable();
+
+        if (state){
+            imageSrc = getResources().getDrawable(ON_IMAGE_SRCS[index]);
+        }
+        else{
+            imageSrc = getResources().getDrawable(OFF_IMAGE_SRCS[index]);
+        }
+
+        button.setImageDrawable(imageSrc);
     }
 
     @Override

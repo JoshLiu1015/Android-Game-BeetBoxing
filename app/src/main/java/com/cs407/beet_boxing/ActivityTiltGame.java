@@ -1,33 +1,35 @@
 package com.cs407.beet_boxing;
 
-        import static com.cs407.beet_boxing.persistence.PersistentInfo.GSON;
+import static com.cs407.beet_boxing.persistence.PersistentInfo.GSON;
 
-        import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
-        import android.animation.Animator;
-        import android.animation.AnimatorListenerAdapter;
-        import android.annotation.SuppressLint;
-        import android.content.Intent;
-        import android.os.Bundle;
-        import android.hardware.Sensor;
-        import android.hardware.SensorManager;
-        import android.hardware.SensorEventListener;
-        import android.hardware.SensorEvent;
-        import android.content.Context;
-        import android.util.DisplayMetrics;
-        import android.view.View;
-        import android.animation.ObjectAnimator;
-        import android.widget.ImageView;
-        import android.widget.TextView;
-        import android.os.Handler;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorEvent;
+import android.content.Context;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.animation.ObjectAnimator;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.os.Handler;
 
-        import com.cs407.beet_boxing.util.DummyInventory;
-        import com.cs407.beet_boxing.util.EnumProduceType;
+import com.cs407.beet_boxing.util.DummyInventory;
+import com.cs407.beet_boxing.util.EnumProduceType;
 
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.List;
-        import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import android.media.MediaPlayer;
 
 public class ActivityTiltGame extends AppCompatActivity {
 
@@ -40,14 +42,21 @@ public class ActivityTiltGame extends AppCompatActivity {
     private boolean isCollision;
     private int screenWidth;
     private int screenHeight;
-//    private Button gardenButton;
+    //    private Button gardenButton;
     private int lives = 3;
     private TextView livesTextView;
     private long startTime;
     private View gameOverLayout;
 
     private final Map<EnumProduceType, Integer> collected = new HashMap<>();
+    private HashMap<Integer, MediaPlayer> mediaPlayers;
+    MediaPlayer playerRock;
 
+    private static final int[] FALLING_IDS = {
+            R.id.fallingCarrot, R.id.fallingBanana, R.id.fallingApple,
+            R.id.fallingPotato, R.id.fallingOnion, R.id.fallingOrange,
+            R.id.fallingMelon, R.id.fallingGinger, R.id.fallingBeet, R.id.fallingRock
+    };
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +81,19 @@ public class ActivityTiltGame extends AppCompatActivity {
 
         fallingObjects = new ArrayList<>();
 
-        createFallingAnimation(findViewById(R.id.fallingCarrot));
-        createFallingAnimation(findViewById(R.id.fallingBeet));
-        createFallingAnimation(findViewById(R.id.fallingRock));
-        createFallingAnimation(findViewById(R.id.fallingApple));
-        createFallingAnimation(findViewById(R.id.fallingMelon));
-        createFallingAnimation(findViewById(R.id.fallingOrange));
-        createFallingAnimation(findViewById(R.id.fallingPotato));
-        createFallingAnimation(findViewById(R.id.fallingBanana));
-        createFallingAnimation(findViewById(R.id.fallingGinger));
-        createFallingAnimation(findViewById(R.id.fallingOnion));
+
+        mediaPlayers = new HashMap<>();
+
+        // set up falling animation and a hashmap for collecting sound
+        for (int fallingId : FALLING_IDS) {
+            createFallingAnimation(findViewById(fallingId));
+
+            MediaPlayer player = MediaPlayer.create(this, R.raw.collect);
+            mediaPlayers.put(fallingId, player);
+        }
+
+        playerRock = MediaPlayer.create(this, R.raw.collect_rock);
+
 
 //        gardenButton = findViewById(R.id.button1);
 //        gardenButton.setOnClickListener(this::startGarden);
@@ -94,6 +106,10 @@ public class ActivityTiltGame extends AppCompatActivity {
 
         gameOverLayout = findViewById(R.id.game_over_layout);
         System.out.println(gameOverLayout);
+
+
+
+
     }
 
     private void updateLivesDisplay() {
@@ -118,7 +134,8 @@ public class ActivityTiltGame extends AppCompatActivity {
         float initialX = (float) (Math.random() * screenWidth);
         fallingObject.setX(initialX);
 
-        long initialDuration = (long) (2000 + Math.random() * 2000);
+        long initialDuration = (long) (2000 + Math.random() * 2000 + Math.random() * 1000);
+        //Sage added another random variable here to space out things
 
         long elapsedTime = System.currentTimeMillis() - startTime;
 
@@ -135,7 +152,28 @@ public class ActivityTiltGame extends AppCompatActivity {
         animation.setDuration(newDuration);
 
         // Use a Handler to start the animation after a random initial delay
-        long initialDelay = (long) (3000 + Math.random() * 1000);
+        long initialDelay = (long) (2000 + Math.random() * 2000);
+        //Sage added another random variable here to space out things below
+        //add different random delay modifiers to different objects to space out further
+        if(fallingObject.equals(findViewById(R.id.fallingCarrot))){
+            initialDelay += 1000 * Math.random();
+        }else if (fallingObject.equals(findViewById(R.id.fallingBeet))){
+            initialDelay += 1500 * Math.random();
+        } else if(fallingObject.equals(findViewById(R.id.fallingApple))){
+            initialDelay += 2000 * Math.random();
+        }else if (fallingObject.equals(findViewById(R.id.fallingMelon))){
+            initialDelay += 2500 * Math.random();
+        } else if(fallingObject.equals(findViewById(R.id.fallingOrange))){
+            initialDelay += 3000 * Math.random();
+        }else if (fallingObject.equals(findViewById(R.id.fallingPotato))){
+            initialDelay += 3500 * Math.random();
+        } else if(fallingObject.equals(findViewById(R.id.fallingBanana))){
+            initialDelay += 4000 * Math.random();
+        }else if (fallingObject.equals(findViewById(R.id.fallingGinger))){
+            initialDelay += 4500 * Math.random();
+        }
+
+
         new Handler().postDelayed(animation::start, initialDelay);
 
         // Initially set the view to be invisible
@@ -161,7 +199,27 @@ public class ActivityTiltGame extends AppCompatActivity {
                 animation.setDuration(randomDuration);
 
                 // Get a random delay before the next fall starts
-                long randomDelay = (long) (Math.random() * 1000);
+                long randomDelay = (long) (2000 + Math.random() * 2000 + Math.random() * 2000);
+                //Sage edited this to space things out
+                //add different random delay modifiers to different objects to space out further
+                if(fallingObject.equals(findViewById(R.id.fallingCarrot))){
+                    randomDelay += 1000 * Math.random();
+                }else if (fallingObject.equals(findViewById(R.id.fallingBeet))){
+                    randomDelay += 1500 * Math.random();
+                } else if(fallingObject.equals(findViewById(R.id.fallingApple))){
+                    randomDelay += 2000 * Math.random();
+                }else if (fallingObject.equals(findViewById(R.id.fallingMelon))){
+                    randomDelay += 2500 * Math.random();
+                } else if(fallingObject.equals(findViewById(R.id.fallingOrange))){
+                    randomDelay += 3000 * Math.random();
+                }else if (fallingObject.equals(findViewById(R.id.fallingPotato))){
+                    randomDelay += 3500 * Math.random();
+                } else if(fallingObject.equals(findViewById(R.id.fallingBanana))){
+                    randomDelay += 4000 * Math.random();
+                }else if (fallingObject.equals(findViewById(R.id.fallingGinger))){
+                    randomDelay += 4500 * Math.random();
+                }
+
                 // Use a Handler to start the animation after the random delay
                 new Handler().postDelayed(animation::start, randomDelay);
 
@@ -211,8 +269,13 @@ public class ActivityTiltGame extends AppCompatActivity {
                     if (!isCollision) {
                         //                    Toast.makeText(MainActivity.this, "collected", Toast.LENGTH_LONG).show();
 
+
                         // Inside the collision detection loop in onSensorChanged
                         if (collisionObject.getId() == R.id.fallingRock && collisionObject.getVisibility() == View.VISIBLE) {
+
+                            playerRock.seekTo(600);
+                            // play collecting rock sound
+                            playerRock.start();
                             // Reduce the number of lives
                             lives--;
                             updateLivesDisplay();
@@ -230,6 +293,13 @@ public class ActivityTiltGame extends AppCompatActivity {
 
                         EnumProduceType produceType = EnumProduceType.getById(collisionObject.getId());
                         if (produceType != null) {
+                            // get the collecting sound associated to the produce (for now, sounds are the same)
+                            MediaPlayer player = mediaPlayers.get(collisionObject.getId());
+                            // the sound doesn't start from the beginning, so seekTo prevents sound delaying
+                            player.seekTo(400);
+                            // play the sound
+                            player.start();
+
                             oldScore = Integer.parseInt(score.getText().toString());
                             oldScore++;
                             score.setText(String.valueOf(oldScore));
@@ -274,3 +344,4 @@ public class ActivityTiltGame extends AppCompatActivity {
 
 
 }
+
