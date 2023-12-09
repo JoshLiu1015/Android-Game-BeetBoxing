@@ -27,102 +27,102 @@
         app:layout_constraintVertical_bias="0.485">
 
         <ImageButton
-            android:id="@+id/button_produce1"
+            android:id="@+id/button_placeholder_1"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/gray"
             android:contentDescription="@string/produce_button_description"
             android:scaleType="fitCenter"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <ImageButton
-            android:id="@+id/button_produce2"
+            android:id="@+id/button_placeholder_2"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/gray"
             android:contentDescription="@string/produce_button_description"
             android:scaleType="fitCenter" />
 
         <ImageButton
-            android:id="@+id/button_produce3"
+            android:id="@+id/button_placeholder_3"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/gray"
             android:contentDescription="@string/produce_button_description"
             android:scaleType="fitCenter" />
 
         <ImageButton
-            android:id="@+id/button_produce4"
+            android:id="@+id/button_placeholder_4"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/gray"
             android:contentDescription="@string/produce_button_description"
             android:scaleType="fitCenter" />
 
         <ImageButton
-            android:id="@+id/button_produce5"
+            android:id="@+id/button_placeholder_5"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/gray"
             android:contentDescription="@string/produce_button_description"
             android:scaleType="fitCenter" />
 
         <ImageButton
-            android:id="@+id/button_produce6"
+            android:id="@+id/button_placeholder_6"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/gray"
             android:contentDescription="@string/produce_button_description"
             android:scaleType="fitCenter" />
 
         <ImageButton
-            android:id="@+id/button_produce7"
+            android:id="@+id/button_placeholder_7"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/gray"
             android:contentDescription="@string/produce_button_description"
             android:scaleType="fitCenter" />
 
         <ImageButton
-            android:id="@+id/button_produce8"
+            android:id="@+id/button_placeholder_8"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/gray"
             android:contentDescription="@string/produce_button_description"
             android:scaleType="fitCenter" />
 
         <ImageButton
-            android:id="@+id/button_produce9"
+            android:id="@+id/button_placeholder_9"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="10dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/gray"
             android:contentDescription="@string/produce_button_description"
             android:scaleType="fitCenter" />
 
@@ -141,26 +141,14 @@
     </GridLayout>
 
     <Button
-        android:id="@+id/record"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="48dp"
+        android:id="@+id/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
         android:layout_marginBottom="16dp"
         android:text="Edit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/practice"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="16dp"
-        android:text="Practice"
-        android:onClick="practice_mode"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.617"
-        app:layout_constraintStart_toEndOf="@+id/record" />
 
     <Button
         android:id="@+id/newGameButton"
@@ -184,5 +172,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.8"
         app:srcCompat="@drawable/settings" />
+
+    <Button
+        android:id="@+id/recordButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:text="Save and Record"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
