@@ -1,5 +1,6 @@
 package com.cs407.beet_boxing;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,6 +38,15 @@ public class RecordingsListActivity extends AppCompatActivity {
 
         loadRecordings();
         recyclerView.setAdapter(new RecordingsAdapter());
+
+        Button btnBackToGarden = findViewById(R.id.btn_back_to_garden);
+        btnBackToGarden.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RecordingsListActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadRecordings() {

@@ -19,7 +19,7 @@
         android:paddingHorizontal="20dp"
         android:paddingVertical="20dp"
         android:rowCount="3"
-        app:layout_constraintBottom_toTopOf="@+id/record"
+        app:layout_constraintBottom_toTopOf="@+id/edit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -157,6 +157,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="New Game"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
