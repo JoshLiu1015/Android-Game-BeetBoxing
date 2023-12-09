@@ -29,6 +29,8 @@ public class share_recording extends AppCompatActivity {
     Runnable runnable;
     private String recordedFilePath;
 
+    private HashMap<Integer, Integer> recordMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +39,11 @@ public class share_recording extends AppCompatActivity {
         playButton = findViewById(R.id.playButton);
         seekBar = findViewById(R.id.seekBar);
         playButton.setTag("PLAY");
+
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("recordMap")) {
+            recordMap = (HashMap<Integer, Integer>) intent.getSerializableExtra("recordMap");
+        }
 
         runnable = new Runnable() {
             @Override
@@ -166,9 +173,17 @@ public class share_recording extends AppCompatActivity {
         }
 
         // Navigate back to RecordingMode activity
-        Intent intent = new Intent(this, RecordingMode.class);
-        startActivity(intent);
+        reRecord();
     }
+
+    private void reRecord() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("recordMap", recordMap); // Pass back the current recordMap
+        setResult(RESULT_OK, returnIntent);
+        finish(); // Close the current activity and return to RecordingMode
+    }
+
+
 
 
     private void stopPlayer() {

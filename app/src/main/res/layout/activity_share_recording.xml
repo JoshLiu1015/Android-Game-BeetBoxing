@@ -27,38 +27,22 @@
         android:id="@+id/save"
         android:layout_width="197dp"
         android:layout_height="60dp"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="250dp"
         android:layout_centerHorizontal="true"
         android:textSize="15dp"
         android:onClick="saveRecord"
         android:text="Save" />
 
-    <Button
-        android:id="@+id/download"
-        android:layout_width="197dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="270dp"
-        android:layout_centerHorizontal="true"
-        android:textSize="15dp"
-        android:onClick="downloadRecord"
-        android:text="Download" />
 
     <Button
         android:id="@+id/record"
         android:layout_width="197dp"
         android:layout_height="60dp"
-        android:layout_marginTop="370dp"
+        android:layout_marginTop="400dp"
         android:layout_centerHorizontal="true"
         android:textSize="15dp"
         android:onClick="reRecord"
         android:text="Re-record" />
 
-    <Button
-        android:id="@+id/garden"
-        android:layout_width="197dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="470dp"
-        android:layout_centerHorizontal="true"
-        android:textSize="15dp"
-        android:text="Garden" />
+
 </RelativeLayout>
