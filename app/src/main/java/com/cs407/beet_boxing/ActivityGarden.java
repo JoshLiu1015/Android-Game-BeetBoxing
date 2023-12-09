@@ -24,6 +24,7 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -148,8 +149,9 @@ public class ActivityGarden extends AppCompatActivity {
 
         Button recordButton = findViewById(R.id.recordButton);
         recordButton.setOnClickListener(e -> {
-            Intent intent = new Intent(this, share_recording.class);
+            Intent intent = new Intent(this, RecordingMode.class);
             intent.putExtra("recordMap", recordMap);
+            Log.d("recordMap", String.valueOf(recordMap));
             startActivity(intent);
         });
 
@@ -178,6 +180,7 @@ public class ActivityGarden extends AppCompatActivity {
         View.OnTouchListener touchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d("DragDrop", "OnTouch called for view: " + view.getId());
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     Boolean isOnCooldown = cooldownMap.getOrDefault(view.getId(), false);
                     if (isOnCooldown) {
@@ -204,6 +207,7 @@ public class ActivityGarden extends AppCompatActivity {
         View.OnDragListener dragListener = new View.OnDragListener() {
             @Override
             public boolean onDrag(View receivingLayoutView, DragEvent dragEvent) {
+                Log.d("DragDrop", "OnDrag called with action: " + dragEvent.getAction());
                 switch (dragEvent.getAction()) {
                     case DragEvent.ACTION_DRAG_STARTED:
                         break;

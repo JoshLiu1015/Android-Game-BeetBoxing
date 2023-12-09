@@ -41,6 +41,20 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/skip"
+        android:layout_width="197dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#861A1A"
+        android:fontFamily="@font/amaranth"
+        android:text="skip"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="500dp"
