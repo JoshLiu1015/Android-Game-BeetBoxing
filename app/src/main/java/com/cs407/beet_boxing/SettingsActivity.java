@@ -26,7 +26,9 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ConfigData config = PersistentInfo.getConfig();
-        assert config != null;
+        if (config == null) {
+            return;
+        }
         setContentView(R.layout.settings_activity);
         backButton = findViewById(R.id.backButton);
         replayButton = findViewById(R.id.replayButton);

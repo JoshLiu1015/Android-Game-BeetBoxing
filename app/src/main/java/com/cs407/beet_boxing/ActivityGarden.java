@@ -179,7 +179,6 @@ public class ActivityGarden extends AppCompatActivity {
                         return false;
                     }
 
-
                     ClipData clipData = ClipData.newPlainText("", "");
                     View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
                     view.startDragAndDrop(clipData, shadowBuilder, view, 0);
@@ -192,9 +191,10 @@ public class ActivityGarden extends AppCompatActivity {
 
         for (int i = 0; i < produceIcons.length; i++) {
             GameData gameData = PersistentInfo.getGameData();
-            assert gameData != null;
-            produceIcons[i].setOnTouchListener(gameData.getInventory().
-                    getOrDefault(PRODUCE_ENUMS[i], 0) >= 5 ? touchListener : null);
+            if (gameData != null) {
+                produceIcons[i].setOnTouchListener(gameData.getInventory().
+                        getOrDefault(PRODUCE_ENUMS[i], 0) >= 5 ? touchListener : null);
+            }
         }
 
         View.OnDragListener dragListener = new View.OnDragListener() {
@@ -339,7 +339,9 @@ public class ActivityGarden extends AppCompatActivity {
             }
         }
         GameData gameData = PersistentInfo.getGameData();
-        assert gameData != null;
+        if (gameData == null) {
+            return;
+        }
 
         int previousAmount = gameData.getInventory().getOrDefault(PRODUCE_ENUMS[index], 0);
         gameData.getInventory().put(PRODUCE_ENUMS[index], previousAmount - 5);
@@ -349,9 +351,11 @@ public class ActivityGarden extends AppCompatActivity {
     }
 
     private void setProduceAmount() {
+        GameData gameData = PersistentInfo.getGameData();
+        if (gameData == null) {
+            return;
+        }
         for (int i = 0; i < produceNums.length; i++) {
-            GameData gameData = PersistentInfo.getGameData();
-            assert gameData != null;
             produceNums[i].setText(gameData.getInventory().getOrDefault(PRODUCE_ENUMS[i], 0).toString());
         }
     }

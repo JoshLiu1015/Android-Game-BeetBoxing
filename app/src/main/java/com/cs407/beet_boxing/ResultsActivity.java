@@ -29,7 +29,9 @@ public class ResultsActivity extends AppCompatActivity {
         int score = intent.getIntExtra("score", -1);
         scoreText.setText("Score: " + score);
         GameData gameData = PersistentInfo.getGameData();
-        assert gameData != null;
+        if (gameData == null) {
+            return;
+        }
 
         if (score > gameData.getHighScore()) {
             gameData.setHighScore(score);
