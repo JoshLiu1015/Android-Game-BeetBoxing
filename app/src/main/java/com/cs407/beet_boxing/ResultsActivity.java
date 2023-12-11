@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.cs407.beet_boxing.persistence.GameData;
 import com.cs407.beet_boxing.persistence.PersistentInfo;
 import com.cs407.beet_boxing.util.DummyInventory;
 import com.cs407.beet_boxing.util.EnumProduceType;
@@ -27,20 +28,24 @@ public class ResultsActivity extends AppCompatActivity {
         TextView scoreText = findViewById(R.id.score);
         int score = intent.getIntExtra("score", -1);
         scoreText.setText("Score: " + score);
+        GameData gameData = PersistentInfo.getGameData();
+        if (gameData == null) {
+            return;
+        }
 
-        if (score > PersistentInfo.gameData.highScore) {
-            PersistentInfo.gameData.highScore = score;
+        if (score > gameData.getHighScore()) {
+            gameData.setHighScore(score);
         }
         TextView highScoreText = findViewById(R.id.highScore);
-        highScoreText.setText("(Best: " + PersistentInfo.gameData.highScore + ")");
+        highScoreText.setText("(Best: " + gameData.getHighScore() + ")");
 
         DummyInventory inventory = GSON.fromJson(intent.getStringExtra("collected"), DummyInventory.class);
         updateQuantityTextViews(inventory);
 
         // Save the new produce items to the PersistentInfo
         for (Map.Entry<EnumProduceType, Integer> entry : inventory.collected.entrySet()) {
-            int previousAmount = PersistentInfo.gameData.inventory.getOrDefault(entry.getKey(), 0);
-            PersistentInfo.gameData.inventory.put(entry.getKey(), previousAmount + entry.getValue());
+            int previousAmount = gameData.getInventory().getOrDefault(entry.getKey(), 0);
+            gameData.getInventory().put(entry.getKey(), previousAmount + entry.getValue());
         }
 
         // exit path
