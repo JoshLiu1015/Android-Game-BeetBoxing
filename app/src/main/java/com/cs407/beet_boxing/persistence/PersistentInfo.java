@@ -62,6 +62,8 @@ public class PersistentInfo {
             result = 2;
         }
 
+        saveConfig();
+        saveGameData();
         return result;
     }
 
