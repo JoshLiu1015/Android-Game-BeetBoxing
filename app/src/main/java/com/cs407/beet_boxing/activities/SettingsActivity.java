@@ -4,17 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.SeekBar;
-import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cs407.beet_boxing.R;
 import com.cs407.beet_boxing.persistence.ConfigData;
 import com.cs407.beet_boxing.persistence.PersistentInfo;
-import com.cs407.beet_boxing.util.EnumControlScheme;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -35,6 +32,11 @@ public class SettingsActivity extends AppCompatActivity {
         tutorialButton = findViewById(R.id.tutorialButton);
         tutorialButton.setOnClickListener(v -> {
             startActivity(new Intent(this, HelpActivity.class));
+            finish();
+        });
+        Button recordingsListButton = findViewById(R.id.recordingsListButton);
+        recordingsListButton.setOnClickListener(v -> {
+            startActivity(new Intent(this, RecordingsListActivity.class));
             finish();
         });
 
@@ -77,12 +79,12 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        Switch controlSchemeSwitch = findViewById(R.id.switch3);
+        /*Switch controlSchemeSwitch = findViewById(R.id.switch3);
         controlSchemeSwitch.setChecked(config.getControlScheme() == EnumControlScheme.DRAG);
         controlSchemeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             config.setControlScheme(isChecked ? EnumControlScheme.DRAG : EnumControlScheme.TILT);
             Log.i("INFO", "control scheme: " + (isChecked ? "Drag" : "Tilt"));
-        });
+        });*/
     }
 
     public void backToMain() {

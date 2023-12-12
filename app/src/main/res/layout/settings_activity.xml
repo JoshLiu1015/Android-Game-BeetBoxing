@@ -24,23 +24,19 @@
         android:text="Gameplay"
         android:textSize="35dp"/>
 
-    <TextView
-        android:id="@+id/tilt"
+    <Button
+        android:id="@+id/recordingsListButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="230dp"
-        android:text="Tilt"
-        android:layout_marginLeft="120dp"
-        android:textSize="20dp"/>
-
-    <TextView
-        android:id="@+id/drag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="230dp"
-        android:text="Drag"
-        android:layout_marginLeft="250dp"
-        android:textSize="20dp"/>
+        android:layout_above="@+id/volume"
+        android:layout_below="@+id/gameplay"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="107dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="107dp"
+        android:layout_marginBottom="47dp"
+        android:text="View Recordings" />
 
     <TextView
         android:id="@+id/volume"
@@ -63,15 +59,6 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="89dp"
         android:layout_marginBottom="98dp" />
-
-    <Switch
-        android:id="@+id/switch3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="230dp"
-        android:scaleX="2"
-        android:scaleY="2" />
 
 
     <Button
