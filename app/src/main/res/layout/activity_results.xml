@@ -303,9 +303,7 @@
         android:id="@+id/gardenButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#4CAF50"
-        android:text="Go to Garden!"
-        android:textColorHighlight="#4CAF50"
-        android:textColorLink="#B4E69E" />
+        android:text="Go to Garden!" />
+
   </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

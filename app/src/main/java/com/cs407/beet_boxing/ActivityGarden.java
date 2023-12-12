@@ -120,6 +120,9 @@ public class ActivityGarden extends AppCompatActivity {
         for (int i = 0; i < BUTTON_PRODUCE_IDS.length; i++) {
             buttonProduces[i] = findViewById(BUTTON_PRODUCE_IDS[i]);
             buttonProduces[i].setTag(true); // Tag as empty
+
+            // initialize colors to be gray because for some reason app is dumb
+            toggleButtonColor(BUTTON_PRODUCE_IDS[i], false);
         }
 
         // Initialize produce icons and numbers
@@ -140,7 +143,7 @@ public class ActivityGarden extends AppCompatActivity {
 
         Button recordButton = findViewById(R.id.recordButton);
         recordButton.setOnClickListener(e -> {
-            Intent intent = new Intent(this, RecordingMode.class);
+            Intent intent = new Intent(this, RecordingModeActivity.class);
             intent.putExtra("recordMap", recordMap);
             Log.d("recordMap", String.valueOf(recordMap));
             startActivity(intent);
@@ -379,13 +382,9 @@ public class ActivityGarden extends AppCompatActivity {
             if (player.isPlaying()) {
                 player.pause(); // Pause playback
                 toggleButtonColor(buttonId, false);
-                toggleButtonImage(buttonId, produceIconId, false);
-
                 //Sage added following code to change image id
                 //feel free to make more readable using arrays or enums
-
-
-
+                toggleButtonImage(buttonId, produceIconId, false);
             } else {
                 // Resume playback, but synchronize with global start time
                 if (globalStartTime != -1) {
