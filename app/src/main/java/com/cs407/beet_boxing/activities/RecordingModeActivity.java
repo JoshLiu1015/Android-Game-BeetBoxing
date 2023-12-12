@@ -121,6 +121,8 @@ public class RecordingModeActivity extends AppCompatActivity {
             "placeholder_7", "placeholder_8", "placeholder_9"
     };
 
+    private long globalStartTime = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -336,6 +338,7 @@ public class RecordingModeActivity extends AppCompatActivity {
 
 
         audioRecord.startRecording();
+        globalStartTime = -1;
         isCapturing = true;
         isRecording = true;
         timerProgressBar.setVisibility(View.VISIBLE);
@@ -377,6 +380,18 @@ public class RecordingModeActivity extends AppCompatActivity {
                 toggleButtonColor(buttonId, false);
                 toggleButtonImage(buttonId, produceIconId, false);
             } else {
+                if (globalStartTime != -1) {
+                    long soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration());
+                    System.out.println("Seeking to: " + soundPosition);
+
+                    player.setOnSeekCompleteListener(mp -> {
+                        mp.start();
+                        mp.setOnSeekCompleteListener(null); // Reset listener
+                    });
+
+                    player.seekTo((int) soundPosition);
+                    System.out.println("Current position after seek: " + player.getCurrentPosition());
+                }
                 player.start(); // Resume playback
                 toggleButtonColor(buttonId, true);
                 toggleButtonImage(buttonId, produceIconId, true);
@@ -400,6 +415,23 @@ public class RecordingModeActivity extends AppCompatActivity {
                 player.prepare(); // Prepare the player (might take time, consider using prepareAsync)
             } catch (IOException e) {
                 Log.e("AudioCapture", "Error setting data source", e);
+                return;
+            }
+
+            // If this is the first sound being played, set the global start time
+            if (globalStartTime == -1) {
+                globalStartTime = System.currentTimeMillis();
+                System.out.println("globalStartTime: " + globalStartTime);
+            } else {
+                // Synchronize the start of this new sound with the others
+                long soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration());
+                System.out.println("Seeking to: " + soundPosition);
+                player.setOnSeekCompleteListener(mp -> {
+                    mp.start();
+                    mp.setOnSeekCompleteListener(null); // Reset listener
+                });
+                player.seekTo((int) soundPosition);
+                System.out.println("Current position after seek: " + player.getCurrentPosition());
             }
 
             player.setLooping(true);

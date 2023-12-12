@@ -390,13 +390,6 @@ public class GardenActivity extends AppCompatActivity {
             } else {
                 // Resume playback, but synchronize with global start time
                 if (globalStartTime != -1) {
-/*                    long soundPosition;
-                    if (produceIconId == R.id.icon_orange) {
-                        soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 400);
-                    }
-                    else {
-                        soundPosition = (System.currentTimeMillis() - globalStartTime) % player.getDuration();
-                    }*/
                     long soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration());
                     System.out.println("Seeking to: " + soundPosition);
 
@@ -423,50 +416,12 @@ public class GardenActivity extends AppCompatActivity {
                 System.out.println("globalStartTime: " + globalStartTime);
             } else {
                 // Synchronize the start of this new sound with the others
-/*                long soundPosition;
-                if (produceIconId == R.id.icon_melon) {
-                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 4);
-                }
-                else if (produceIconId == R.id.icon_orange) {
-                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + -60);
-                }
-                else if (produceIconId == R.id.icon_beet) {
-                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() - 13);
-                }
-                else if (produceIconId == R.id.icon_banana) {
-                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 125);
-                }
-                else if (produceIconId == R.id.icon_apple) {
-                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 48);
-                }
-                else if (produceIconId == R.id.icon_potato) {
-                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 100);
-                }
-                else if (produceIconId == R.id.icon_carrot) {
-                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() - 8);
-                }
-                else if (produceIconId == R.id.icon_ginger) {
-                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() - 15);
-                }
-                else if (produceIconId == R.id.icon_onion) {
-                    soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration());
-                }
-                else {
-                    soundPosition = (System.currentTimeMillis() - globalStartTime) % player.getDuration();
-                }
-                long soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration() + 560);*/
                 long soundPosition = (System.currentTimeMillis() - globalStartTime) % (player.getDuration());
                 System.out.println("Seeking to: " + soundPosition);
-                // player should be in start/pause state before calling seekTo
-//                player.start();
-//                player.pause();
                 player.setOnSeekCompleteListener(mp -> {
                     mp.start();
                     mp.setOnSeekCompleteListener(null); // Reset listener
                 });
-//                if (soundResourceId == R.id.icon_orange) {
-//                    soundPosition += 500;
-//                }
                 player.seekTo((int) soundPosition);
                 System.out.println("Current position after seek: " + player.getCurrentPosition());
             }
