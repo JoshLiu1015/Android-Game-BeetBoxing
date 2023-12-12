@@ -1,4 +1,4 @@
-package com.cs407.beet_boxing;
+package com.cs407.beet_boxing.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -16,11 +16,13 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.cs407.beet_boxing.R;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class share_recording extends AppCompatActivity {
+public class ShareRecordingActivity extends AppCompatActivity {
 
     MediaPlayer player;
     Button playButton;
@@ -146,6 +148,7 @@ public class share_recording extends AppCompatActivity {
             Toast.makeText(this, "File saved: " + newFile.getName(), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, RecordingsListActivity.class);
             startActivity(intent);
+            finish();
             // Optionally, navigate to another activity or update UI
         } else {
             Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();

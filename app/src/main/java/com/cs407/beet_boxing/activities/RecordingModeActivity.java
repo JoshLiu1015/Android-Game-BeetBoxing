@@ -1,4 +1,4 @@
-package com.cs407.beet_boxing;
+package com.cs407.beet_boxing.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -28,6 +28,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.cs407.beet_boxing.R;
+import com.cs407.beet_boxing.services.AudioCaptureService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -138,8 +141,9 @@ public class RecordingModeActivity extends AppCompatActivity {
         btnBackToGarden = findViewById(R.id.back);
         btnBackToGarden.setOnClickListener(v -> {
             stopAllMediaPlayers();
-            Intent intent = new Intent(this, ActivityGarden.class);
+            Intent intent = new Intent(this, GardenActivity.class);
             startActivity(intent);
+            finish();
         });
 
         // Retrieve the recordMap
@@ -503,11 +507,10 @@ public class RecordingModeActivity extends AppCompatActivity {
                 File file = new File(getFilesDir(), "captured_audio1.wav");
                 String filePath = file.getAbsolutePath();
 
-                Intent intent = new Intent(this, share_recording.class);
+                Intent intent = new Intent(this, ShareRecordingActivity.class);
                 intent.putExtra("RECORDED_FILE_PATH", filePath);
                 intent.putExtra("recordMap", recordMap); // Pass the recordMap to share_recording activity
                 startActivityForResult(intent, SHARE_RECORDING_REQUEST);
-
             } catch (IOException e) {
                 Log.e("AudioCapture", "Error converting PCM to WAV", e);
             }

@@ -1,4 +1,4 @@
-package com.cs407.beet_boxing;
+package com.cs407.beet_boxing.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cs407.beet_boxing.R;
 import com.cs407.beet_boxing.persistence.ConfigData;
 import com.cs407.beet_boxing.persistence.PersistentInfo;
 import com.cs407.beet_boxing.util.EnumControlScheme;
@@ -21,7 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
     AudioManager audioManager;
 
     Button backButton;
-    Button replayButton;
+    Button tutorialButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +32,11 @@ public class SettingsActivity extends AppCompatActivity {
         }
         setContentView(R.layout.settings_activity);
         backButton = findViewById(R.id.backButton);
-        replayButton = findViewById(R.id.replayButton);
+        tutorialButton = findViewById(R.id.tutorialButton);
+        tutorialButton.setOnClickListener(v -> {
+            startActivity(new Intent(this, HelpActivity.class));
+            finish();
+        });
 
         seekBarVolume = findViewById(R.id.seekBarVolume);
         seekBarVolume.setMax(15);
@@ -83,10 +88,12 @@ public class SettingsActivity extends AppCompatActivity {
     public void backToMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void backToGarden() {
-        Intent intent = new Intent(this, ActivityGarden.class);
+        Intent intent = new Intent(this, GardenActivity.class);
         startActivity(intent);
+        finish();
     }
 }

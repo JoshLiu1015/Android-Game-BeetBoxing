@@ -1,4 +1,4 @@
-package com.cs407.beet_boxing;
+package com.cs407.beet_boxing.activities;
 
 import static com.cs407.beet_boxing.persistence.PersistentInfo.GSON;
 
@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.os.Handler;
 
+import com.cs407.beet_boxing.R;
 import com.cs407.beet_boxing.util.DummyInventory;
 import com.cs407.beet_boxing.util.EnumProduceType;
 
@@ -29,9 +30,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import android.media.MediaPlayer;
 
-public class ActivityTiltGame extends AppCompatActivity {
+public class TiltGameActivity extends AppCompatActivity {
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -94,11 +94,6 @@ public class ActivityTiltGame extends AppCompatActivity {
 
         playerRock = MediaPlayer.create(this, R.raw.collect_rock);
 
-
-//        gardenButton = findViewById(R.id.button1);
-//        gardenButton.setOnClickListener(this::startGarden);
-
-
         livesTextView = findViewById(R.id.lives);
         updateLivesDisplay();
 
@@ -106,10 +101,6 @@ public class ActivityTiltGame extends AppCompatActivity {
 
         gameOverLayout = findViewById(R.id.game_over_layout);
         System.out.println(gameOverLayout);
-
-
-
-
     }
 
     private void updateLivesDisplay() {
@@ -122,8 +113,8 @@ public class ActivityTiltGame extends AppCompatActivity {
         intent.putExtra("collected", GSON.toJson(new DummyInventory(collected)));
 
         startActivity(intent);
+        finish();
     }
-
 
     private void createFallingAnimation(View fallingObject) {
         fallingObjects.add(fallingObject);

@@ -1,4 +1,4 @@
-package com.cs407.beet_boxing;
+package com.cs407.beet_boxing.activities;
 
 import static com.cs407.beet_boxing.util.EnumProduceType.APPLE;
 import static com.cs407.beet_boxing.util.EnumProduceType.BANANA;
@@ -29,13 +29,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cs407.beet_boxing.R;
 import com.cs407.beet_boxing.persistence.GameData;
 import com.cs407.beet_boxing.persistence.PersistentInfo;
 
 import java.util.HashMap;
 
 /** @noinspection DataFlowIssue*/
-public class ActivityGarden extends AppCompatActivity {
+public class GardenActivity extends AppCompatActivity {
 
     private HashMap<Integer, MediaPlayer> mediaPlayers;
     private View editMenuLayout;
@@ -139,7 +140,7 @@ public class ActivityGarden extends AppCompatActivity {
 
     private void setupListeners() {
         Button newGameButton = findViewById(R.id.newGameButton);
-        newGameButton.setOnClickListener(e -> startActivity(new Intent(this, ActivityTiltGame.class)));
+        newGameButton.setOnClickListener(e -> startActivity(new Intent(this, TiltGameActivity.class)));
 
         Button recordButton = findViewById(R.id.recordButton);
         recordButton.setOnClickListener(e -> {
@@ -147,6 +148,7 @@ public class ActivityGarden extends AppCompatActivity {
             intent.putExtra("recordMap", recordMap);
             Log.d("recordMap", String.valueOf(recordMap));
             startActivity(intent);
+            finish();
         });
 
 

@@ -1,4 +1,4 @@
-package com.cs407.beet_boxing;
+package com.cs407.beet_boxing.activities;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.cs407.beet_boxing.R;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +47,7 @@ public class RecordingsListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 stopPlaying();
-                Intent intent = new Intent(RecordingsListActivity.this, ActivityGarden.class);
+                Intent intent = new Intent(RecordingsListActivity.this, GardenActivity.class);
                 startActivity(intent);
             }
         });

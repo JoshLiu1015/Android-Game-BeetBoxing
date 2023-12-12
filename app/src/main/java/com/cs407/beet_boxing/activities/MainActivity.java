@@ -1,4 +1,4 @@
-package com.cs407.beet_boxing;
+package com.cs407.beet_boxing.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cs407.beet_boxing.R;
 import com.cs407.beet_boxing.persistence.PersistentInfo;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,22 +49,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startGame(View view) {
-        Intent intent = new Intent(this, ActivityTiltGame.class);
+        Intent intent = new Intent(this, TiltGameActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void openSetting(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void openHelp(View view) {
         Intent intent = new Intent(this, HelpActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void skip(View view){
         Intent intent = new Intent(this, RecordingModeActivity.class);
         startActivity(intent);
+        finish();
     }
 }
