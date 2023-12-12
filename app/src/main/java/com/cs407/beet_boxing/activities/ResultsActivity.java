@@ -1,4 +1,4 @@
-package com.cs407.beet_boxing;
+package com.cs407.beet_boxing.activities;
 
 import static com.cs407.beet_boxing.persistence.PersistentInfo.GSON;
 
@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.cs407.beet_boxing.R;
 import com.cs407.beet_boxing.persistence.GameData;
 import com.cs407.beet_boxing.persistence.PersistentInfo;
 import com.cs407.beet_boxing.util.DummyInventory;
@@ -50,9 +51,10 @@ public class ResultsActivity extends AppCompatActivity {
 
         // exit path
         Button goToGarden = findViewById(R.id.gardenButton);
-        goToGarden.setOnClickListener( event ->
-            startActivity(new Intent(this, ActivityGarden.class))
-        );
+        goToGarden.setOnClickListener( event -> {
+            startActivity(new Intent(this, GardenActivity.class));
+            finish();
+        });
     }
 
     private void updateQuantityTextViews(DummyInventory inventory) {

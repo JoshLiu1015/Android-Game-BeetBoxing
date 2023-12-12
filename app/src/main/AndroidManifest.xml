@@ -20,37 +20,40 @@
         android:theme="@style/Theme.Beet_boxing"
         tools:targetApi="31">
         <activity
-            android:name=".RecordingsListActivity"
-            android:exported="false" />
+            android:name=".activities.RecordingsListActivity"
+            android:exported="false"
+            android:screenOrientation="userPortrait"/>
         <activity
-            android:name=".RecordingMode"
-            android:exported="true" />
+            android:name=".activities.RecordingModeActivity"
+            android:exported="true"
+            android:screenOrientation="userPortrait"/>
         <activity
-            android:name=".HelpActivity"
-            android:exported="false" />
-        <activity
-            android:name=".share_recording"
+            android:name=".activities.HelpActivity"
             android:exported="false"
             android:screenOrientation="userPortrait" />
         <activity
-            android:name=".ActivityGarden"
+            android:name=".activities.ShareRecordingActivity"
             android:exported="false"
             android:screenOrientation="userPortrait" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.GardenActivity"
+            android:exported="false"
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".activities.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings"
             android:screenOrientation="userPortrait" />
         <activity
-            android:name=".ActivityTiltGame"
+            android:name=".activities.TiltGameActivity"
             android:exported="false"
             android:screenOrientation="userPortrait" />
         <activity
-            android:name=".ResultsActivity"
+            android:name=".activities.ResultsActivity"
             android:exported="false"
             android:screenOrientation="userPortrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="true"
             android:screenOrientation="userPortrait">
 
@@ -64,7 +67,7 @@
         </activity>
 
         <service
-            android:name=".AudioCaptureService"
+            android:name=".services.AudioCaptureService"
             android:foregroundServiceType="mediaProjection" />
     </application>
 

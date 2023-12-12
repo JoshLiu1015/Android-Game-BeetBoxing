@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityTiltGame" >
+    tools:context=".activities.TiltGameActivity" >
 
     <include layout="@layout/game_over"
         android:layout_width="match_parent"

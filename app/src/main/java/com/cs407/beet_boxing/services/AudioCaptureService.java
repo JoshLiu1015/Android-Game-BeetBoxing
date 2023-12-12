@@ -1,4 +1,4 @@
-package com.cs407.beet_boxing;
+package com.cs407.beet_boxing.services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;

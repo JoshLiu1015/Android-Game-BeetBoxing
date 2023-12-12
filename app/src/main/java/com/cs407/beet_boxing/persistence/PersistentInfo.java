@@ -12,8 +12,6 @@ import com.google.gson.GsonBuilder;
  * that needs to be stored between sessions. Currently, the values of the config and gameData
  * are saved as instance variables and can be modified as you wish. The correct implementation of
  * this method will handle the storing/loading without the user having to worry about it.
- * <p></p>
- * Note: currently this remains untested as I have nothing to really test it with on the main branch.
  */
 public class PersistentInfo {
 
