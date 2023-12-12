@@ -218,9 +218,7 @@ public class TiltGameActivity extends AppCompatActivity {
             }
         });
 
-
     }
-
 
     private final SensorEventListener sensorListener = new SensorEventListener() {
         @Override
@@ -234,7 +232,7 @@ public class TiltGameActivity extends AppCompatActivity {
 
             // Move the box left or right based on this value
 //            ImageView box = findViewById(R.id.box);
-            float newX = box.getX() - x * 2; // Multiplied by 5 for sensitivity, adjust as needed
+            float newX = box.getX() - x * 4; // Multiplied by 4 for sensitivity, adjust as needed
 
             // Ensure box does not move off the screen
             if (newX < 0) {
@@ -320,7 +318,6 @@ public class TiltGameActivity extends AppCompatActivity {
         }
     };
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -332,7 +329,6 @@ public class TiltGameActivity extends AppCompatActivity {
         super.onPause();
         sensorManager.unregisterListener(sensorListener);
     }
-
 
 }
 
