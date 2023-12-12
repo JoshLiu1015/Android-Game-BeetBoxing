@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class share_recording extends AppCompatActivity {
 
@@ -71,11 +72,7 @@ public class share_recording extends AppCompatActivity {
         if (player == null) {
             player = MediaPlayer.create(this, R.raw.song);
             seekBar.setMax(player.getDuration());
-            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                public void onCompletion(MediaPlayer mp) {
-                    stopPlayer();
-                }
-            });
+            player.setOnCompletionListener(mp -> stopPlayer());
         }
 
         if (playButton.getTag().equals("PLAY")) {

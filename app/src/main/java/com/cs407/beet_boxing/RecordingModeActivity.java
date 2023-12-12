@@ -88,13 +88,11 @@ public class RecordingModeActivity extends AppCompatActivity {
             R.drawable.melon, R.drawable.ginger, R.drawable.beet
     };
 
-
     private static final int[] ICON_IDS = {
             R.id.icon_carrot, R.id.icon_banana, R.id.icon_apple,
             R.id.icon_potato, R.id.icon_onion, R.id.icon_orange,
             R.id.icon_melon, R.id.icon_ginger, R.id.icon_beet
     };
-
 
     private static final int[] SOUND_RESOURCE_IDS = {
             R.raw.violin_trimmed, R.raw.guitar_trimmed, R.raw.piano_trimmed,
@@ -138,13 +136,10 @@ public class RecordingModeActivity extends AppCompatActivity {
         buttonProduce9 = findViewById(R.id.button_produce9);
 
         btnBackToGarden = findViewById(R.id.back);
-        btnBackToGarden.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                stopAllMediaPlayers();
-                Intent intent = new Intent(this, ActivityGarden.class);
-                startActivity(intent);
-            }
+        btnBackToGarden.setOnClickListener(v -> {
+            stopAllMediaPlayers();
+            Intent intent = new Intent(this, ActivityGarden.class);
+            startActivity(intent);
         });
 
         // Retrieve the recordMap
@@ -213,7 +208,6 @@ public class RecordingModeActivity extends AppCompatActivity {
                                 buttonProduce9.setImageResource(OFF_IMAGE_SRCS[i]);
                                 buttonProduce9.setOnClickListener(v -> toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce9.getId(), OFF_IMAGE_SRCS[index]));
                             }
-                            // check its name
                         }
                     }
                 }
@@ -236,16 +230,16 @@ public class RecordingModeActivity extends AppCompatActivity {
             }
         });
 
-        Button back = findViewById(R.id.backToGarden);
-        back.setOnClickListener(v -> {
-            startActivity(new Intent(this, ActivityGarden.class));
-            finish();
-        });
+        toggleAllButtonVisualsOff();
+    }
 
-        // Slight hack-fix to solve issue where button colors are not being initialized correctly in
-        // this activity. Probably something to do with the fact that we seem to be using the same
-        // id's across multiple activities here, but I don't have the time right now to properly
-        // fix this
+    /**
+     * Slight hack-fix to solve issue where button colors are not being initialized correctly in
+     * this activity. Probably something to do with the fact that we seem to be using the same
+     * id's across multiple activities here, but I don't have the time right now to properly
+     * fix this
+     */
+    private void toggleAllButtonVisualsOff() {
         toggleButtonColor(R.id.button_produce1, false);
         toggleButtonColor(R.id.button_produce2, false);
         toggleButtonColor(R.id.button_produce3, false);
@@ -255,11 +249,34 @@ public class RecordingModeActivity extends AppCompatActivity {
         toggleButtonColor(R.id.button_produce7, false);
         toggleButtonColor(R.id.button_produce8, false);
         toggleButtonColor(R.id.button_produce9, false);
+        for (int i = 0; i < ICON_IDS.length; i++) {
+            if (recordMap.containsKey(ICON_IDS[i])) {
+                for (int k = 0; k < BUTTON_PRODUCE_IDS.length; k++) {
+                    if (recordMap.get(ICON_IDS[i]) == BUTTON_PRODUCE_IDS[k]) {
+                        switch (PLACEHOLDER_NAME[k]) {
+                            case "placeholder_1" ->
+                                    buttonProduce1.setImageResource(OFF_IMAGE_SRCS[i]);
+                            case "placeholder_2" ->
+                                    buttonProduce2.setImageResource(OFF_IMAGE_SRCS[i]);
+                            case "placeholder_3" ->
+                                    buttonProduce3.setImageResource(OFF_IMAGE_SRCS[i]);
+                            case "placeholder_4" ->
+                                    buttonProduce4.setImageResource(ON_IMAGE_SRCS[i]);
+                            case "placeholder_5" ->
+                                    buttonProduce5.setImageResource(OFF_IMAGE_SRCS[i]);
+                            case "placeholder_6" ->
+                                    buttonProduce6.setImageResource(OFF_IMAGE_SRCS[i]);
+                            case "placeholder_7" ->
+                                    buttonProduce7.setImageResource(OFF_IMAGE_SRCS[i]);
+                            case "placeholder_8" ->
+                                    buttonProduce8.setImageResource(OFF_IMAGE_SRCS[i]);
+                            default -> buttonProduce9.setImageResource(OFF_IMAGE_SRCS[i]);
+                        }
+                    }
+                }
+            }
+        }
     }
-
-
-
-
 
     private void startAudioCapture() {
         Log.d("AudioCapture", "startAudioCapture() called");
@@ -284,6 +301,7 @@ public class RecordingModeActivity extends AppCompatActivity {
         }
 
         stopAllMediaPlayers();
+        toggleAllButtonVisualsOff();
         if (audioRecord != null) {
             Log.d("RecordingMode", "Existing audioRecord instance found. Releasing...");
             audioRecord.release();
@@ -417,16 +435,15 @@ public class RecordingModeActivity extends AppCompatActivity {
             return;
         }
 
-        if (state){
+        if (state) {
             imageSrc = getResources().getDrawable(ON_IMAGE_SRCS[index], null);
         }
-        else{
+        else {
             imageSrc = getResources().getDrawable(OFF_IMAGE_SRCS[index], null);
         }
 
         button.setImageDrawable(imageSrc);
     }
-
 
     @Override
     protected void onDestroy() {
@@ -498,7 +515,6 @@ public class RecordingModeActivity extends AppCompatActivity {
         capturingThread = null;
     }
 
-
     private void startCountDownTimer() {
         final int totalTime = 30000; // 30 seconds in milliseconds
         countDownTimer = new CountDownTimer(totalTime, 1000) {
@@ -530,7 +546,6 @@ public class RecordingModeActivity extends AppCompatActivity {
         mediaPlayers.clear();
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("AudioCapture", "onActivityResult() - requestCode: " + requestCode + ", resultCode: " + resultCode);
@@ -544,6 +559,7 @@ public class RecordingModeActivity extends AppCompatActivity {
             recordMap = (HashMap<Integer, Integer>) data.getSerializableExtra("recordMap");
 
             // Re-setup the UI based on the updated recordMap
+            toggleAllButtonVisualsOff();
             if (recordMap != null) {
                 for (int j = 0; j<BUTTON_PRODUCE_IDS.length; j ++){
                     Log.d("RecordingMode", "this should be hashmap value " + BUTTON_PRODUCE_IDS[j]);
@@ -565,79 +581,33 @@ public class RecordingModeActivity extends AppCompatActivity {
                                 final int index = i;
                                 Log.d("RecordingMode", PRODUCE_NAME[i] + "'s corresponding placeholder is " + PLACEHOLDER_NAME[k]);
                                 if (PLACEHOLDER_NAME[k].equals("placeholder_1")){
-                                    buttonProduce1.setImageResource(ON_IMAGE_SRCS[i]);
-                                    buttonProduce1.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce1.getId());
-                                        }
-                                    });
+                                    buttonProduce1.setImageResource(OFF_IMAGE_SRCS[i]);
+                                    buttonProduce1.setOnClickListener(v -> toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce1.getId(), OFF_IMAGE_SRCS[index]));
                                 } else if (PLACEHOLDER_NAME[k].equals("placeholder_2")) {
-                                    buttonProduce2.setImageResource(ON_IMAGE_SRCS[i]);
-                                    buttonProduce2.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce2.getId());
-                                        }
-                                    });
+                                    buttonProduce2.setImageResource(OFF_IMAGE_SRCS[i]);
+                                    buttonProduce2.setOnClickListener(v -> toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce2.getId(), OFF_IMAGE_SRCS[index]));
                                 } else if (PLACEHOLDER_NAME[k].equals("placeholder_3")){
-                                    buttonProduce3.setImageResource(ON_IMAGE_SRCS[i]);
-                                    buttonProduce3.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce3.getId());
-                                        }
-                                    });
+                                    buttonProduce3.setImageResource(OFF_IMAGE_SRCS[i]);
+                                    buttonProduce3.setOnClickListener(v -> toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce3.getId(), OFF_IMAGE_SRCS[index]));
                                 } else if (PLACEHOLDER_NAME[k].equals("placeholder_4")){
-                                    buttonProduce4.setImageResource(ON_IMAGE_SRCS[i]);
-                                    buttonProduce4.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce4.getId());
-                                        }
-                                    });
+                                    buttonProduce4.setImageResource(OFF_IMAGE_SRCS[i]);
+                                    buttonProduce4.setOnClickListener(v -> toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce4.getId(), OFF_IMAGE_SRCS[index]));
                                 } else if (PLACEHOLDER_NAME[k].equals("placeholder_5")){
-                                    buttonProduce5.setImageResource(ON_IMAGE_SRCS[i]);
-                                    buttonProduce5.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce5.getId());
-                                        }
-                                    });
+                                    buttonProduce5.setImageResource(OFF_IMAGE_SRCS[i]);
+                                    buttonProduce5.setOnClickListener(v -> toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce5.getId(), OFF_IMAGE_SRCS[index]));
                                 } else if (PLACEHOLDER_NAME[k].equals("placeholder_6")){
-                                    buttonProduce6.setImageResource(ON_IMAGE_SRCS[i]);
-                                    buttonProduce6.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce6.getId());
-                                        }
-                                    });
+                                    buttonProduce6.setImageResource(OFF_IMAGE_SRCS[i]);
+                                    buttonProduce6.setOnClickListener(v -> toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce6.getId(), OFF_IMAGE_SRCS[index]));
                                 } else if (PLACEHOLDER_NAME[k].equals("placeholder_7")){
-                                    buttonProduce7.setImageResource(ON_IMAGE_SRCS[i]);
-                                    buttonProduce7.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce7.getId());
-                                        }
-                                    });
+                                    buttonProduce7.setImageResource(OFF_IMAGE_SRCS[i]);
+                                    buttonProduce7.setOnClickListener(v -> toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce7.getId(), OFF_IMAGE_SRCS[index]));
                                 } else if (PLACEHOLDER_NAME[k].equals("placeholder_8")){
-                                    buttonProduce8.setImageResource(ON_IMAGE_SRCS[i]);
-                                    buttonProduce8.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce8.getId());
-                                        }
-                                    });
+                                    buttonProduce8.setImageResource(OFF_IMAGE_SRCS[i]);
+                                    buttonProduce8.setOnClickListener(v -> toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce8.getId(), OFF_IMAGE_SRCS[index]));
                                 } else{
-                                    buttonProduce9.setImageResource(ON_IMAGE_SRCS[i]);
-                                    buttonProduce9.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce9.getId());
-                                        }
-                                    });
+                                    buttonProduce9.setImageResource(OFF_IMAGE_SRCS[i]);
+                                    buttonProduce9.setOnClickListener(v -> toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce9.getId(), OFF_IMAGE_SRCS[index]));
                                 }
-                                // check its name
                             }
                         }
                     }
