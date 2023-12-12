@@ -21,7 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
     AudioManager audioManager;
 
     Button backButton;
-    Button replayButton;
+//    Button replayButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +31,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
         setContentView(R.layout.settings_activity);
         backButton = findViewById(R.id.backButton);
-        replayButton = findViewById(R.id.replayButton);
+//        replayButton = findViewById(R.id.replayButton);
 
         seekBarVolume = findViewById(R.id.seekBarVolume);
         seekBarVolume.setMax(15);
@@ -72,12 +72,12 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        Switch controlSchemeSwitch = findViewById(R.id.switch3);
-        controlSchemeSwitch.setChecked(config.getControlScheme() == EnumControlScheme.DRAG);
-        controlSchemeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            config.setControlScheme(isChecked ? EnumControlScheme.DRAG : EnumControlScheme.TILT);
-            Log.i("INFO", "control scheme: " + (isChecked ? "Drag" : "Tilt"));
-        });
+//        Switch controlSchemeSwitch = findViewById(R.id.switch3);
+//        controlSchemeSwitch.setChecked(config.getControlScheme() == EnumControlScheme.DRAG);
+//        controlSchemeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+//            config.setControlScheme(isChecked ? EnumControlScheme.DRAG : EnumControlScheme.TILT);
+//            Log.i("INFO", "control scheme: " + (isChecked ? "Drag" : "Tilt"));
+//        });
     }
 
     public void backToMain() {
