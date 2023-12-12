@@ -37,6 +37,8 @@ import java.util.HashMap;
 
 
 public class RecordingModeActivity extends AppCompatActivity {
+    private static final int SHARE_RECORDING_REQUEST = 1;
+
     private TextView countdownTimerTextView;
 
     private Button recordButton;
@@ -70,6 +72,8 @@ public class RecordingModeActivity extends AppCompatActivity {
     private ImageButton buttonProduce7;
     private ImageButton buttonProduce8;
     private ImageButton buttonProduce9;
+
+    private Button btnBackToGarden;
 
 
     private static final int[] ON_IMAGE_SRCS = {
@@ -116,7 +120,6 @@ public class RecordingModeActivity extends AppCompatActivity {
             "placeholder_7", "placeholder_8", "placeholder_9"
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,20 +137,31 @@ public class RecordingModeActivity extends AppCompatActivity {
         buttonProduce8 = findViewById(R.id.button_produce8);
         buttonProduce9 = findViewById(R.id.button_produce9);
 
+        btnBackToGarden = findViewById(R.id.back);
+        btnBackToGarden.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopAllMediaPlayers();
+                Intent intent = new Intent(this, ActivityGarden.class);
+                startActivity(intent);
+            }
+        });
+
         // Retrieve the recordMap
         Intent intent = getIntent();
-        HashMap<Integer, Integer> recordMap = new HashMap<>();
-        recordMap.put(2131362079, 2131361903);
-        recordMap.put(2131362077, 2131361904); // Note: keys should be unique
-        recordMap.put(2131362076, 2131361905);
-        recordMap.put(2131362086, 2131361906);
-        recordMap.put(2131362084, 2131361907);
-        recordMap.put(2131362085, 2131361908);
-        recordMap.put(2131362083, 2131361909);
-        recordMap.put(2131362081, 2131361910);
-        recordMap.put(2131362078, 2131361911);
         if (intent != null && intent.hasExtra("recordMap")) {
             recordMap = (HashMap<Integer, Integer>) intent.getSerializableExtra("recordMap");
+        } else{
+            recordMap = new HashMap<>();
+            recordMap.put(2131362079, 2131361903);
+            recordMap.put(2131362077, 2131361904); // Note: keys should be unique
+            recordMap.put(2131362076, 2131361905);
+            recordMap.put(2131362086, 2131361906);
+            recordMap.put(2131362084, 2131361907);
+            recordMap.put(2131362085, 2131361908);
+            recordMap.put(2131362083, 2131361909);
+            recordMap.put(2131362081, 2131361910);
+            recordMap.put(2131362078, 2131361911);
         }
 
         // Set up UI based on recordMap
@@ -243,9 +257,12 @@ public class RecordingModeActivity extends AppCompatActivity {
         toggleButtonColor(R.id.button_produce9, false);
     }
 
+
+
+
+
     private void startAudioCapture() {
         Log.d("AudioCapture", "startAudioCapture() called");
-
         Intent serviceIntent = new Intent(this, AudioCaptureService.class);
         ContextCompat.startForegroundService(this, serviceIntent);
         if (mediaProjection == null) {
@@ -266,12 +283,14 @@ public class RecordingModeActivity extends AppCompatActivity {
             return;
         }
 
+        stopAllMediaPlayers();
         if (audioRecord != null) {
             Log.d("RecordingMode", "Existing audioRecord instance found. Releasing...");
             audioRecord.release();
             audioRecord = null;
         }
         Log.d("AudioCapture", "startCapturing() - Setting up AudioRecord");
+        btnBackToGarden.setEnabled(false);
         recordButton.setText("Recording...");
         recordButton.setEnabled(false); // Disable the button while recording
         AudioPlaybackCaptureConfiguration config = new AudioPlaybackCaptureConfiguration.Builder(mediaProjection)
@@ -319,6 +338,13 @@ public class RecordingModeActivity extends AppCompatActivity {
         Log.d("RecordingMode", "New AudioRecord instance started");
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Set the countdown timer text to "30" every time the activity resumes
+        countdownTimerTextView.setText("30");
+    }
 
     private void toggleSound(int soundResourceId, int buttonId, int produceIconId) {
         // Check if the button already has a MediaPlayer associated with it
@@ -436,7 +462,6 @@ public class RecordingModeActivity extends AppCompatActivity {
             Log.d("RecordingMode", "Releasing audioRecord");
             audioRecord.release();
             audioRecord = null;
-            resetRecordingSetup();
             // showSaveFileDialog();
             timerProgressBar.setVisibility(View.GONE);
             if (countDownTimer != null) {
@@ -463,7 +488,8 @@ public class RecordingModeActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(this, share_recording.class);
                 intent.putExtra("RECORDED_FILE_PATH", filePath);
-                startActivity(intent);
+                intent.putExtra("recordMap", recordMap); // Pass the recordMap to share_recording activity
+                startActivityForResult(intent, SHARE_RECORDING_REQUEST);
 
             } catch (IOException e) {
                 Log.e("AudioCapture", "Error converting PCM to WAV", e);
@@ -486,6 +512,7 @@ public class RecordingModeActivity extends AppCompatActivity {
                 stopAudioCapture();
                 stopAllMediaPlayers();
                 recordButton.setText("Record");
+                btnBackToGarden.setEnabled(true);
                 recordButton.setEnabled(true); // Re-enable the button
                 countdownTimerTextView.setText("0");
                 Toast.makeText(RecordingModeActivity.this, "Recording has stopped", Toast.LENGTH_SHORT).show();
@@ -512,6 +539,110 @@ public class RecordingModeActivity extends AppCompatActivity {
         if (requestCode == MEDIA_PROJECTION_REQUEST && resultCode == RESULT_OK) {
             mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
             startCapturing();
+        } else if (requestCode == SHARE_RECORDING_REQUEST && resultCode == RESULT_OK && data != null) {
+            // Retrieve the updated recordMap from the intent
+            recordMap = (HashMap<Integer, Integer>) data.getSerializableExtra("recordMap");
+
+            // Re-setup the UI based on the updated recordMap
+            if (recordMap != null) {
+                for (int j = 0; j<BUTTON_PRODUCE_IDS.length; j ++){
+                    Log.d("RecordingMode", "this should be hashmap value " + BUTTON_PRODUCE_IDS[j]);
+                }
+
+                for (int d = 0; d<ICON_IDS.length; d ++){
+                    Log.d("RecordingMode", "this should be hashmap key " + ICON_IDS[d]);
+                }
+                for (int i = 0; i < ICON_IDS.length; i++) {
+                    // if produce found
+                    if (recordMap.containsKey(ICON_IDS[i])) {
+                        // check its name
+                        Log.d("RecordingMode", PRODUCE_NAME[i] + " is in the garden");
+
+                        // loop over all the placeholder IDs
+                        for (int k = 0; k < BUTTON_PRODUCE_IDS.length; k++) {
+                            // if the placeholder that contains the produce is found
+                            if (recordMap.get(ICON_IDS[i]) == BUTTON_PRODUCE_IDS[k]) {
+                                final int index = i;
+                                Log.d("RecordingMode", PRODUCE_NAME[i] + "'s corresponding placeholder is " + PLACEHOLDER_NAME[k]);
+                                if (PLACEHOLDER_NAME[k].equals("placeholder_1")){
+                                    buttonProduce1.setImageResource(ON_IMAGE_SRCS[i]);
+                                    buttonProduce1.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce1.getId());
+                                        }
+                                    });
+                                } else if (PLACEHOLDER_NAME[k].equals("placeholder_2")) {
+                                    buttonProduce2.setImageResource(ON_IMAGE_SRCS[i]);
+                                    buttonProduce2.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce2.getId());
+                                        }
+                                    });
+                                } else if (PLACEHOLDER_NAME[k].equals("placeholder_3")){
+                                    buttonProduce3.setImageResource(ON_IMAGE_SRCS[i]);
+                                    buttonProduce3.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce3.getId());
+                                        }
+                                    });
+                                } else if (PLACEHOLDER_NAME[k].equals("placeholder_4")){
+                                    buttonProduce4.setImageResource(ON_IMAGE_SRCS[i]);
+                                    buttonProduce4.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce4.getId());
+                                        }
+                                    });
+                                } else if (PLACEHOLDER_NAME[k].equals("placeholder_5")){
+                                    buttonProduce5.setImageResource(ON_IMAGE_SRCS[i]);
+                                    buttonProduce5.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce5.getId());
+                                        }
+                                    });
+                                } else if (PLACEHOLDER_NAME[k].equals("placeholder_6")){
+                                    buttonProduce6.setImageResource(ON_IMAGE_SRCS[i]);
+                                    buttonProduce6.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce6.getId());
+                                        }
+                                    });
+                                } else if (PLACEHOLDER_NAME[k].equals("placeholder_7")){
+                                    buttonProduce7.setImageResource(ON_IMAGE_SRCS[i]);
+                                    buttonProduce7.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce7.getId());
+                                        }
+                                    });
+                                } else if (PLACEHOLDER_NAME[k].equals("placeholder_8")){
+                                    buttonProduce8.setImageResource(ON_IMAGE_SRCS[i]);
+                                    buttonProduce8.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce8.getId());
+                                        }
+                                    });
+                                } else{
+                                    buttonProduce9.setImageResource(ON_IMAGE_SRCS[i]);
+                                    buttonProduce9.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            toggleSound(SOUND_RESOURCE_IDS[index], buttonProduce9.getId());
+                                        }
+                                    });
+                                }
+                                // check its name
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -581,13 +712,4 @@ public class RecordingModeActivity extends AppCompatActivity {
         in.close();
         out.close();
     }
-
-    private void resetRecordingSetup() {
-        // Reset the timer
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-            countdownTimerTextView.setText("" + 30);
-        }
-    }
-
 }

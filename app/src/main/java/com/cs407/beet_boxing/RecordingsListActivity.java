@@ -43,7 +43,8 @@ public class RecordingsListActivity extends AppCompatActivity {
         btnBackToGarden.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RecordingsListActivity.this, MainActivity.class);
+                stopPlaying();
+                Intent intent = new Intent(RecordingsListActivity.this, ActivityGarden.class);
                 startActivity(intent);
             }
         });
@@ -95,6 +96,12 @@ public class RecordingsListActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        stopPlaying(); // Stop playing when back pressed
+        super.onBackPressed();
     }
 
     private void stopPlaying() {

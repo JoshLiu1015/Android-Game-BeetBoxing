@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="#317E34"
         android:onClick="togglePlayStop"
         android:text="play" />
 
@@ -28,42 +27,22 @@
         android:id="@+id/save"
         android:layout_width="197dp"
         android:layout_height="60dp"
+        android:layout_marginTop="250dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="170dp"
-        android:backgroundTint="#317E34"
+        android:textSize="15dp"
         android:onClick="saveRecord"
-        android:text="Save"
-        android:textSize="15dp" />
+        android:text="Save" />
 
-    <Button
-        android:id="@+id/download"
-        android:layout_width="197dp"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="270dp"
-        android:backgroundTint="#317E34"
-        android:onClick="downloadRecord"
-        android:text="Download"
-        android:textSize="15dp" />
 
     <Button
         android:id="@+id/record"
         android:layout_width="197dp"
         android:layout_height="60dp"
+        android:layout_marginTop="400dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="370dp"
-        android:backgroundTint="#317E34"
+        android:textSize="15dp"
         android:onClick="reRecord"
-        android:text="Re-record"
-        android:textSize="15dp" />
+        android:text="Re-record" />
 
-    <Button
-        android:id="@+id/garden"
-        android:layout_width="197dp"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="470dp"
-        android:backgroundTint="#317E34"
-        android:text="Garden"
-        android:textSize="15dp" />
+
 </RelativeLayout>
